@@ -1,6 +1,6 @@
-#!name=GFW Basic Optimized
-#!desc=Essential services for bypassing GFW in China - Google, Meta, X/Twitter, TikTok, Netflix, Telegram/Discord/Slack/Viber, GitHub, AI, Popular CDNs + Important IP-CIDR (Optimized & Clean)
-#!homepage=Custom edited for daily use in China
+#!name=GFW Optimized 2026
+#!desc=Optimized Proxy Rules for bypassing GFW China 2026 - Enhanced Google Ecosystem (Drive/Docs/Meet/Maps/Photos) + Zoom + Important IP-CIDR
+#!homepage=Custom edited & researched for daily use in China
 [Rule]
 DOMAIN-SUFFIX,google.com,PROXY
 DOMAIN-SUFFIX,googleapis.com,PROXY
@@ -12,6 +12,12 @@ DOMAIN-SUFFIX,ytimg.com,PROXY
 DOMAIN-SUFFIX,ggpht.com,PROXY
 DOMAIN-SUFFIX,googleusercontent.com,PROXY
 DOMAIN-SUFFIX,gmail.com,PROXY
+DOMAIN-SUFFIX,drive.google.com,PROXY
+DOMAIN-SUFFIX,docs.google.com,PROXY
+DOMAIN-SUFFIX,meet.google.com,PROXY
+DOMAIN-SUFFIX,photos.google.com,PROXY
+DOMAIN-SUFFIX,maps.google.com,PROXY
+DOMAIN-SUFFIX,googlemaps.com,PROXY
 DOMAIN-SUFFIX,appspot.com,PROXY
 DOMAIN-SUFFIX,dl.google.com,PROXY
 DOMAIN-SUFFIX,gvt1.com,PROXY
@@ -44,6 +50,8 @@ DOMAIN-SUFFIX,discordapp.com,PROXY
 DOMAIN-SUFFIX,discordapp.net,PROXY
 DOMAIN-SUFFIX,discord.gg,PROXY
 DOMAIN-SUFFIX,slack.com,PROXY
+DOMAIN-SUFFIX,zoom.us,PROXY
+DOMAIN-SUFFIX,zoom.com,PROXY
 DOMAIN-SUFFIX,viber.com,PROXY
 DOMAIN-SUFFIX,github.com,PROXY
 DOMAIN-SUFFIX,githubusercontent.com,PROXY
@@ -71,5 +79,7 @@ IP-CIDR,74.125.0.0/16,PROXY,no-resolve
 IP-CIDR,172.217.0.0/16,PROXY,no-resolve
 IP-CIDR,142.250.0.0/15,PROXY,no-resolve
 IP-CIDR,108.177.0.0/17,PROXY,no-resolve
+IP-CIDR,35.191.0.0/16,PROXY,no-resolve
+IP-CIDR,130.211.0.0/22,PROXY,no-resolve
 IP-CIDR,91.108.4.0/22,PROXY,no-resolve
 IP-CIDR,149.154.160.0/20,PROXY,no-resolve
