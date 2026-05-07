@@ -1,0 +1,31 @@
+#!name=Zalo & ZaloPay Proxy (VN Services)
+#!desc=Separate rules for Zalo and ZaloPay - Bypass GFW China (DOMAIN-SUFFIX only, optimized 2026)
+#!homepage=Custom module for daily use in China
+[Rule]
+
+# === Zalo Core Domains ===
+DOMAIN-SUFFIX,zalo.me,PROXY
+DOMAIN-SUFFIX,zaloapp.com,PROXY
+DOMAIN-SUFFIX,dlfl.me,PROXY
+DOMAIN-SUFFIX,dlfl.vn,PROXY
+
+# === Zalo Additional Important Subdomains ===
+DOMAIN-SUFFIX,api.zalo.me,PROXY
+DOMAIN-SUFFIX,chat.zalo.me,PROXY
+DOMAIN-SUFFIX,developers.zalo.me,PROXY
+DOMAIN-SUFFIX,connect.zalo.me,PROXY
+DOMAIN-SUFFIX,pay.zalo.me,PROXY
+
+# === ZaloPay Core Domains ===
+DOMAIN-SUFFIX,zalopay.vn,PROXY
+DOMAIN-SUFFIX,openapi.zalopay.vn,PROXY
+DOMAIN-SUFFIX,sb-openapi.zalopay.vn,PROXY
+DOMAIN-SUFFIX,developer.zalopay.vn,PROXY
+DOMAIN-SUFFIX,api.zalopay.vn,PROXY
+DOMAIN-SUFFIX,apimep.zalopay.vn,PROXY
+DOMAIN-SUFFIX,sbapimep.zalopay.vn,PROXY
+
+# === ZaloPay Payment & QR (thường dùng cho giao dịch) ===
+DOMAIN-SUFFIX,qrpay.zalopay.vn,PROXY
+
+# Kết thúc module
