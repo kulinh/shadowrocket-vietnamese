@@ -1,31 +1,47 @@
-#!name=Zalo & ZaloPay Proxy (VN Services)
-#!desc=Separate rules for Zalo and ZaloPay - Bypass GFW China (DOMAIN-SUFFIX only, optimized 2026)
-#!homepage=Custom module for daily use in China
+#!name=Zalo & ZaloPay Full Proxy (Updated 2026)
+#!desc=Comprehensive Zalo + ZaloPay domains for bypassing GFW China - Includes all core, API, media storage & merchant portals (researched May 2026)
+#!homepage=Custom module based on official docs & public subdomain scans
 [Rule]
 
-# === Zalo Core Domains ===
+# === Zalo Core & API Domains ===
 DOMAIN-SUFFIX,zalo.me,PROXY
 DOMAIN-SUFFIX,zaloapp.com,PROXY
 DOMAIN-SUFFIX,dlfl.me,PROXY
 DOMAIN-SUFFIX,dlfl.vn,PROXY
 
-# === Zalo Additional Important Subdomains ===
+# Zalo important subdomains
 DOMAIN-SUFFIX,api.zalo.me,PROXY
 DOMAIN-SUFFIX,chat.zalo.me,PROXY
-DOMAIN-SUFFIX,developers.zalo.me,PROXY
-DOMAIN-SUFFIX,connect.zalo.me,PROXY
+DOMAIN-SUFFIX,video.zalo.me,PROXY
+DOMAIN-SUFFIX,oa.zalo.me,PROXY
 DOMAIN-SUFFIX,pay.zalo.me,PROXY
+DOMAIN-SUFFIX,connect.zalo.me,PROXY
 
-# === ZaloPay Core Domains ===
+# === Zalo Media / File Storage (quan trọng cho gửi ảnh, video, file) ===
+DOMAIN-SUFFIX,zadn.vn,PROXY
+DOMAIN-SUFFIX,zalo-api.zadn.vn,PROXY
+DOMAIN-SUFFIX,zdn.vn,PROXY
+DOMAIN-SUFFIX,cscpdl.com,PROXY
+DOMAIN-SUFFIX,cscfdl.com,PROXY
+DOMAIN-SUFFIX,cscvdl.com,PROXY
+DOMAIN-SUFFIX,cscvdlz.com,PROXY
+DOMAIN-SUFFIX,social-dl.com,PROXY
+DOMAIN-SUFFIX,social-dl-z.com,PROXY
+
+# === ZaloPay Core & Payment Domains ===
 DOMAIN-SUFFIX,zalopay.vn,PROXY
 DOMAIN-SUFFIX,openapi.zalopay.vn,PROXY
 DOMAIN-SUFFIX,sb-openapi.zalopay.vn,PROXY
-DOMAIN-SUFFIX,developer.zalopay.vn,PROXY
 DOMAIN-SUFFIX,api.zalopay.vn,PROXY
 DOMAIN-SUFFIX,apimep.zalopay.vn,PROXY
 DOMAIN-SUFFIX,sbapimep.zalopay.vn,PROXY
-
-# === ZaloPay Payment & QR (thường dùng cho giao dịch) ===
+DOMAIN-SUFFIX,developer.zalopay.vn,PROXY
 DOMAIN-SUFFIX,qrpay.zalopay.vn,PROXY
+DOMAIN-SUFFIX,gateway.zalopay.vn,PROXY
+DOMAIN-SUFFIX,sbgateway.zalopay.vn,PROXY
+
+# ZaloPay merchant & additional payment
+DOMAIN-SUFFIX,mc.zalopay.vn,PROXY
+DOMAIN-SUFFIX,sbmc.zalopay.vn,PROXY
 
 # Kết thúc module
