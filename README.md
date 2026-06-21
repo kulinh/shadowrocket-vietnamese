@@ -128,11 +128,16 @@ shadowrocket-vietnamese/
 
 ### 🤖 Dùng cho v2rayNG (Android)
 File `.module` **không** dùng trực tiếp trên v2rayNG (khác nhân/định dạng). Em đã chuyển sẵn rule proxy sang định dạng routing Xray — dán khối `"routing"` vào `config.json` của v2rayNG (cần đủ outbound tag `proxy`/`direct`/`block`):
-Dùng **khối `routing`** này — phù hợp khi bạn xài subscription / fleet nhiều server (VLESS, Hysteria2…): v2rayNG tự map server đang chọn vào outbound tag `proxy`, nên routing áp lên toàn bộ fleet.
-- [`docs/v2rayng_routing_CN.json`](docs/v2rayng_routing_CN.json) — routing **Trung Quốc** (kèm `geosite:cn`/`geoip:cn` đi thẳng).
-- [`docs/v2rayng_routing_UAE.json`](docs/v2rayng_routing_UAE.json) — routing **UAE** (mở OTT VoIP/video).
+v2rayNG bản mới (2.2.x) tổ chức routing theo **ruleset** và nhập qua **"Import rulesets from clipboard"**. Hai file dưới đây ở đúng định dạng đó, dùng được với subscription / fleet nhiều server (VLESS, Hysteria2…) — v2rayNG tự map server/balancer đang chọn vào outbound tag `proxy`:
+- [`docs/v2rayng_rulesets_CN.json`](docs/v2rayng_rulesets_CN.json) — ruleset **Trung Quốc** (kèm `geosite:cn`/`geoip:cn` đi thẳng).
+- [`docs/v2rayng_rulesets_UAE.json`](docs/v2rayng_rulesets_UAE.json) — ruleset **UAE** (mở OTT VoIP/video).
 
-> Cách áp: v2rayNG → **Cài đặt → Cài đặt định tuyến (Routing) → Custom rules**, dán nội dung `rules`; hoặc ghép khối `"routing"` vào `config.json` sẵn có. Cả hai đã tích hợp chặn quảng cáo qua `geosite:category-ads-all` và mô phỏng `FINAL,DIRECT` bằng rule catch-all → thay luôn cho các file `.module` tương ứng trên Android.
+**Cách áp:**
+1. Mở file → copy toàn bộ nội dung JSON vào clipboard.
+2. v2rayNG → **Cài đặt → Cài đặt định tuyến** → menu (⋮) → **Import rulesets from clipboard**.
+3. ⚠️ Thao tác này **thay thế TOÀN BỘ** ruleset hiện có — nên **Export rulesets to clipboard** để backup trước nếu cần.
+
+> Đã tích hợp chặn quảng cáo (`geosite:category-ads-all`), bypass LAN, và rule cuối `port 0-65535 → direct` (mô phỏng `FINAL,DIRECT`) → thay luôn cho các file `.module` tương ứng trên Android. Cần có sẵn `geoip.dat`/`geosite.dat` (Cài đặt → cập nhật geo assets).
 
 ---
 
