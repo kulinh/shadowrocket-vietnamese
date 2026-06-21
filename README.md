@@ -128,10 +128,15 @@ shadowrocket-vietnamese/
 
 ### 🤖 Dùng cho v2rayNG (Android)
 File `.module` **không** dùng trực tiếp trên v2rayNG (khác nhân/định dạng). Em đã chuyển sẵn rule proxy sang định dạng routing Xray — dán khối `"routing"` vào `config.json` của v2rayNG (cần đủ outbound tag `proxy`/`direct`/`block`):
-- [`docs/v2rayng_routing_CN.json`](docs/v2rayng_routing_CN.json) — kịch bản **Trung Quốc** (kèm `geosite:cn`/`geoip:cn` đi thẳng).
-- [`docs/v2rayng_routing_UAE.json`](docs/v2rayng_routing_UAE.json) — kịch bản **UAE** (mở OTT VoIP/video).
+**Cách 1 — Dán cả `config.json` hoàn chỉnh (dễ nhất):** import vào v2rayNG bằng *Custom config*, chỉ cần sửa 2 chỗ `SERVER_ADDRESS_HERE` và `YOUR_UUID_HERE`.
+- [`docs/v2rayng_config_CN.json`](docs/v2rayng_config_CN.json) — config đầy đủ kịch bản **Trung Quốc**.
+- [`docs/v2rayng_config_UAE.json`](docs/v2rayng_config_UAE.json) — config đầy đủ kịch bản **UAE**.
 
-> Cả hai đã tích hợp chặn quảng cáo qua `geosite:category-ads-all` và mô phỏng `FINAL,DIRECT` bằng rule catch-all → thay luôn cho các file `.module` tương ứng trên Android.
+**Cách 2 — Chỉ lấy khối `routing`** (nếu đã có config riêng): dán vào `config.json` sẵn có.
+- [`docs/v2rayng_routing_CN.json`](docs/v2rayng_routing_CN.json) — routing **Trung Quốc** (kèm `geosite:cn`/`geoip:cn` đi thẳng).
+- [`docs/v2rayng_routing_UAE.json`](docs/v2rayng_routing_UAE.json) — routing **UAE** (mở OTT VoIP/video).
+
+> File config mẫu dùng outbound **VMess**. Nếu server của bạn là VLESS/Trojan/Shadowsocks, thay riêng khối outbound `"tag":"proxy"` bằng outbound tương ứng của bạn (giữ nguyên `dns`/`inbounds`/`routing`). Cả hai đã tích hợp chặn quảng cáo qua `geosite:category-ads-all` và mô phỏng `FINAL,DIRECT` bằng rule catch-all → thay luôn cho các file `.module` tương ứng trên Android.
 
 ---
 
