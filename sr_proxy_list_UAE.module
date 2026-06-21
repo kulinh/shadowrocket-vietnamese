@@ -1,45 +1,195 @@
-#!name=UAE Essential Proxy Bypass
-#!desc=Bypass UAE TDRA Firewall - VoIP Calls (WhatsApp, FaceTime, Skype, Viber, Telegram), Adult Content, Gambling & Essential Services (Optimized 2026)
-#!homepage=Custom edited for UAE daily use
+#!name=UAE OTT Bypass (VoIP & Video Call) 2026
+#!desc=Vượt firewall TDRA ở UAE — tập trung mở khóa GỌI THOẠI & VIDEO qua OTT (WhatsApp, FaceTime, Messenger, Viber, Zalo, WeChat, Telegram, Signal, Skype/Teams, Google Meet, Discord, LINE). Kèm IP-CIDR server media (RTP/STUN/TURN) để cuộc gọi không rớt tiếng/đứng hình. Bổ sung mạng xã hội, streaming, nội dung người lớn & cờ bạc.
+#!homepage=https://github.com/kulinh/shadowrocket-vietnamese
+
+# ============================================================================
+#  HƯỚNG DẪN (BLACKLIST MODE — cho khi ở UAE)
+#  1) Cài đặt > Module: thêm module này (đặt sr_reject_list ở trên nếu dùng).
+#  2) Trong config (.conf), phần [Rule] dòng CUỐI CÙNG đặt:  FINAL,DIRECT
+#     => Các domain/IP dưới đây đi PROXY, phần còn lại đi thẳng.
+#  3) Nếu app báo lỗi phát hiện proxy: Cài đặt > Proxy > đổi sang none (TUN).
+#  Lưu ý quan trọng cho VoIP: cuộc gọi thoại/video nối tới server media bằng
+#  IP, nên các khối IP-CIDR bên dưới là BẮT BUỘC để gọi không rớt.
+# ============================================================================
+
 [Rule]
+
+# ============================================================================
+#  NHÓM 1 — OTT NHẮN TIN / GỌI THOẠI & VIDEO  (trọng tâm cho UAE)
+# ============================================================================
+
+# ---------------------------- WhatsApp --------------------------------------
 DOMAIN-SUFFIX,whatsapp.com,PROXY
 DOMAIN-SUFFIX,whatsapp.net,PROXY
+DOMAIN-SUFFIX,wa.me,PROXY
+
+# ---------------------------- FaceTime / iMessage (Apple) -------------------
 DOMAIN-SUFFIX,apple.com,PROXY
 DOMAIN-SUFFIX,icloud.com,PROXY
 DOMAIN-SUFFIX,me.com,PROXY
 DOMAIN-SUFFIX,mzstatic.com,PROXY
-DOMAIN-SUFFIX,skype.com,PROXY
-DOMAIN-SUFFIX,skypeassets.com,PROXY
+DOMAIN-SUFFIX,aaplimg.com,PROXY
+DOMAIN-SUFFIX,push.apple.com,PROXY
+DOMAIN-SUFFIX,facetime.apple.com,PROXY
+
+# ---------------------------- Facebook Messenger ---------------------------
+DOMAIN-SUFFIX,messenger.com,PROXY
+DOMAIN-SUFFIX,m.me,PROXY
+DOMAIN-SUFFIX,facebook.com,PROXY
+DOMAIN-SUFFIX,facebook.net,PROXY
+DOMAIN-SUFFIX,fbcdn.net,PROXY
+DOMAIN-SUFFIX,fbsbx.com,PROXY
+
+# ---------------------------- Viber ----------------------------------------
 DOMAIN-SUFFIX,viber.com,PROXY
+DOMAIN-SUFFIX,viber.net,PROXY
+DOMAIN-KEYWORD,viber,PROXY
+
+# ---------------------------- Zalo (chat/gọi/media) ------------------------
+DOMAIN-SUFFIX,zalo.me,PROXY
+DOMAIN-SUFFIX,zaloapp.com,PROXY
+DOMAIN-SUFFIX,zadn.vn,PROXY
+DOMAIN-SUFFIX,zdn.vn,PROXY
+DOMAIN-SUFFIX,dlfl.me,PROXY
+DOMAIN-SUFFIX,dlfl.vn,PROXY
+DOMAIN-SUFFIX,cscpdl.com,PROXY
+DOMAIN-SUFFIX,cscfdl.com,PROXY
+DOMAIN-SUFFIX,cscvdl.com,PROXY
+DOMAIN-SUFFIX,cscvdlz.com,PROXY
+DOMAIN-SUFFIX,social-dl.com,PROXY
+DOMAIN-SUFFIX,social-dl-z.com,PROXY
+
+# ---------------------------- WeChat / Weixin ------------------------------
+DOMAIN-SUFFIX,wechat.com,PROXY
+DOMAIN-SUFFIX,weixin.qq.com,PROXY
+DOMAIN-SUFFIX,wx.qq.com,PROXY
+DOMAIN-SUFFIX,wechatapp.com,PROXY
+DOMAIN-SUFFIX,qq.com,PROXY
+DOMAIN-SUFFIX,qpic.cn,PROXY
+DOMAIN-SUFFIX,qlogo.cn,PROXY
+DOMAIN-KEYWORD,wechat,PROXY
+
+# ---------------------------- Telegram -------------------------------------
 DOMAIN-SUFFIX,telegram.org,PROXY
+DOMAIN-SUFFIX,telegram.me,PROXY
 DOMAIN-SUFFIX,t.me,PROXY
 DOMAIN-SUFFIX,telegra.ph,PROXY
+DOMAIN-SUFFIX,tdesktop.com,PROXY
+DOMAIN-SUFFIX,telesco.pe,PROXY
+DOMAIN-SUFFIX,cdn-telegram.org,PROXY
+DOMAIN-KEYWORD,telegram,PROXY
+
+# ---------------------------- Signal ---------------------------------------
+DOMAIN-SUFFIX,signal.org,PROXY
+DOMAIN-SUFFIX,signal.art,PROXY
+DOMAIN-SUFFIX,whispersystems.org,PROXY
+
+# ---------------------------- Skype / Microsoft Teams ----------------------
+DOMAIN-SUFFIX,skype.com,PROXY
+DOMAIN-SUFFIX,skypeassets.com,PROXY
+DOMAIN-SUFFIX,lync.com,PROXY
+DOMAIN-SUFFIX,teams.microsoft.com,PROXY
+DOMAIN-SUFFIX,teams.live.com,PROXY
+DOMAIN-SUFFIX,teams.cloud.microsoft,PROXY
+DOMAIN-SUFFIX,sfbassets.com,PROXY
+
+# ---------------------------- Google Meet / Duo ----------------------------
+DOMAIN-SUFFIX,meet.google.com,PROXY
+DOMAIN-SUFFIX,googleapis.com,PROXY
+DOMAIN-SUFFIX,gstatic.com,PROXY
+
+# ---------------------------- Discord (voice) ------------------------------
 DOMAIN-SUFFIX,discord.com,PROXY
 DOMAIN-SUFFIX,discordapp.com,PROXY
 DOMAIN-SUFFIX,discordapp.net,PROXY
+DOMAIN-SUFFIX,discord.gg,PROXY
+DOMAIN-SUFFIX,discord.media,PROXY
+
+# ---------------------------- LINE -----------------------------------------
+DOMAIN-SUFFIX,line.me,PROXY
+DOMAIN-SUFFIX,line-scdn.net,PROXY
+DOMAIN-SUFFIX,line-apps.com,PROXY
+
+# ----------------------------------------------------------------------------
+#  IP-CIDR SERVER MEDIA (RTP/STUN/TURN) — BẮT BUỘC để cuộc gọi không rớt
+# ----------------------------------------------------------------------------
+# --- Meta (WhatsApp / Messenger / Instagram), AS32934 ---
+IP-CIDR,31.13.24.0/21,PROXY,no-resolve
+IP-CIDR,31.13.64.0/18,PROXY,no-resolve
+IP-CIDR,45.64.40.0/22,PROXY,no-resolve
+IP-CIDR,66.220.144.0/20,PROXY,no-resolve
+IP-CIDR,69.63.176.0/20,PROXY,no-resolve
+IP-CIDR,69.171.224.0/19,PROXY,no-resolve
+IP-CIDR,74.119.76.0/22,PROXY,no-resolve
+IP-CIDR,102.132.96.0/20,PROXY,no-resolve
+IP-CIDR,129.134.0.0/16,PROXY,no-resolve
+IP-CIDR,157.240.0.0/16,PROXY,no-resolve
+IP-CIDR,173.252.64.0/18,PROXY,no-resolve
+IP-CIDR,179.60.192.0/22,PROXY,no-resolve
+IP-CIDR,185.60.216.0/22,PROXY,no-resolve
+IP-CIDR,204.15.20.0/22,PROXY,no-resolve
+IP-CIDR6,2a03:2880::/32,PROXY,no-resolve
+# --- Apple (FaceTime/iMessage relay) — cả 17.0.0.0/8 là của Apple.
+#     Nếu thấy App Store/iCloud chậm, có thể bỏ dòng này (FaceTime vẫn cần nó). ---
+IP-CIDR,17.0.0.0/8,PROXY,no-resolve
+# --- Telegram (cuộc gọi nối datacenter/reflector bằng IP) ---
+IP-CIDR,91.108.4.0/22,PROXY,no-resolve
+IP-CIDR,91.108.8.0/22,PROXY,no-resolve
+IP-CIDR,91.108.12.0/22,PROXY,no-resolve
+IP-CIDR,91.108.16.0/22,PROXY,no-resolve
+IP-CIDR,91.108.20.0/22,PROXY,no-resolve
+IP-CIDR,91.108.56.0/22,PROXY,no-resolve
+IP-CIDR,95.161.64.0/20,PROXY,no-resolve
+IP-CIDR,149.154.160.0/20,PROXY,no-resolve
+IP-CIDR,149.154.164.0/22,PROXY,no-resolve
+IP-CIDR6,2001:67c:4e8::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23c::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23d::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23f::/48,PROXY,no-resolve
+
+# ============================================================================
+#  NHÓM 2 — MẠNG XÃ HỘI / STREAMING
+# ============================================================================
+DOMAIN-SUFFIX,meta.com,PROXY
+DOMAIN-SUFFIX,instagram.com,PROXY
+DOMAIN-SUFFIX,cdninstagram.com,PROXY
+DOMAIN-SUFFIX,threads.net,PROXY
+DOMAIN-SUFFIX,x.com,PROXY
+DOMAIN-SUFFIX,twitter.com,PROXY
+DOMAIN-SUFFIX,twimg.com,PROXY
+DOMAIN-SUFFIX,t.co,PROXY
+DOMAIN-SUFFIX,tiktok.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn.com,PROXY
+DOMAIN-SUFFIX,google.com,PROXY
+DOMAIN-SUFFIX,youtube.com,PROXY
+DOMAIN-SUFFIX,googlevideo.com,PROXY
+DOMAIN-SUFFIX,ytimg.com,PROXY
+DOMAIN-SUFFIX,netflix.com,PROXY
+DOMAIN-SUFFIX,nflxvideo.net,PROXY
+DOMAIN-SUFFIX,nflxext.com,PROXY
+
+# ============================================================================
+#  NHÓM 3 — NỘI DUNG NGƯỜI LỚN
+# ============================================================================
 DOMAIN-SUFFIX,pornhub.com,PROXY
 DOMAIN-SUFFIX,pornhubpremium.com,PROXY
 DOMAIN-SUFFIX,xvideos.com,PROXY
 DOMAIN-SUFFIX,xnxx.com,PROXY
 DOMAIN-SUFFIX,xhamster.com,PROXY
+DOMAIN-SUFFIX,xhamster.desi,PROXY
 DOMAIN-SUFFIX,youporn.com,PROXY
 DOMAIN-SUFFIX,redtube.com,PROXY
-DOMAIN-SUFFIX,xhamster.desi,PROXY
+
+# ============================================================================
+#  NHÓM 4 — CỜ BẠC / CÁ CƯỢC
+# ============================================================================
 DOMAIN-SUFFIX,bet365.com,PROXY
 DOMAIN-SUFFIX,888.com,PROXY
-DOMAIN-SUFFIX,pok
-DOMAIN-SUFFIX,google.com,PROXY
-DOMAIN-SUFFIX,googleapis.com,PROXY
-DOMAIN-SUFFIX,youtube.com,PROXY
-DOMAIN-SUFFIX,googlevideo.com,PROXY
-DOMAIN-SUFFIX,netflix.com,PROXY
-DOMAIN-SUFFIX,nflxvideo.net,PROXY
-DOMAIN-SUFFIX,meta.com,PROXY
-DOMAIN-SUFFIX,facebook.com,PROXY
-DOMAIN-SUFFIX,instagram.com,PROXY
-DOMAIN-SUFFIX,x.com,PROXY
-DOMAIN-SUFFIX,twitter.com,PROXY
-DOMAIN-SUFFIX,tiktok.com,PROXY
+DOMAIN-SUFFIX,pokerstars.com,PROXY
+
+# ============================================================================
+#  NHÓM 5 — CDN LỚN (nhiều app/voice dùng chung hạ tầng này)
+# ============================================================================
 DOMAIN-SUFFIX,akamai.net,PROXY
 DOMAIN-SUFFIX,akamaized.net,PROXY
 DOMAIN-SUFFIX,cloudfront.net,PROXY
