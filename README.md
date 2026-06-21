@@ -19,7 +19,7 @@
 
 - **Ở Trung Quốc:** vượt GFW để vào Google, Meta (Facebook/Instagram/WhatsApp/Threads/Messenger), Telegram, Viber, TikTok, YouTube, X/Twitter, AI (ChatGPT/Claude/Gemini)… mà **không làm chậm** các trang nội địa TQ.
 - **Ở UAE:** mở khóa cuộc gọi VoIP (WhatsApp, FaceTime, Skype, Viber, Telegram) và các dịch vụ bị TDRA chặn.
-- **Mọi nơi:** đảm bảo **Zalo & ZaloPay** vẫn hoạt động đầy đủ (chat, gọi, gửi ảnh/video/file, thanh toán) ngay cả khi đang bật proxy.
+- **Mọi nơi:** module **Zalo & ZaloPay** gom đủ domain + toàn bộ dải IP của VNG (AS38244), cho phép route trọn traffic Zalo/ZaloPay qua proxy (chat, gọi, gửi ảnh/video/file, thanh toán).
 - **Chặn quảng cáo / tracker** bằng danh sách REJECT khổng lồ.
 
 Repo dùng dạng **module rule** thay vì file config đầy đủ — gọn gàng, dễ bật/tắt, dễ chỉnh sửa, và không động đến phần chứng chỉ / cài đặt riêng của từng người.
@@ -32,11 +32,11 @@ Repo dùng dạng **module rule** thay vì file config đầy đủ — gọn g�
 |--------|----------|------|
 | [`sr_proxy_list_CN.module`](sr_proxy_list_CN.module) | **Vượt GFW ở Trung Quốc.** Bao phủ toàn diện Google/Alphabet, Meta, Telegram, Viber, TikTok, X, AI, Dev, Media + IP-CIDR cho dịch vụ hay bị nhiễm DNS | PROXY (blacklist) |
 | [`sr_proxy_list_UAE.module`](sr_proxy_list_UAE.module) | **Vượt firewall TDRA ở UAE.** Mở VoIP, nội dung bị chặn & dịch vụ thiết yếu | PROXY (blacklist) |
-| [`zalo_zalopay.module`](zalo_zalopay.module) | Bắt buộc cho Zalo/ZaloPay đi đúng luồng (đặc biệt khi ở TQ): core, API, media storage, cổng thanh toán, merchant | PROXY |
+| [`zalo_zalopay.module`](zalo_zalopay.module) | Route **toàn bộ** traffic Zalo/ZaloPay qua proxy: đầy đủ domain (chat/API/media/thanh toán) **+ toàn bộ dải IP VNG (AS38244)** đã gộp tối thiểu | PROXY |
 | [`sr_direct_list.module`](sr_direct_list.module) | ~115.000 domain nội địa TQ → đi thẳng (dùng cho **whitelist mode**) | DIRECT |
 | [`sr_reject_list.module`](sr_reject_list.module) | ~175.000 domain quảng cáo / tracker → chặn | REJECT |
 
-> `sr_direct_list` và `sr_reject_list` được đồng bộ từ upstream và cập nhật hàng ngày. Hai module proxy (`CN`, `UAE`) và `zalo_zalopay` là **tùy biến riêng** của repo này.
+> `sr_direct_list` và `sr_reject_list` được **đồng bộ thủ công** từ upstream [GMOogway/shadowrocket-rules](https://github.com/GMOogway/shadowrocket-rules) (repo này không chạy CI tự build). Ba module `CN`, `UAE`, `zalo_zalopay` là **tùy biến riêng** của repo.
 
 ---
 
@@ -67,7 +67,7 @@ Có 2 chế độ:
 Trong Shadowrocket: **Cấu hình → Tệp từ xa**, dán link config mẫu (~20 dòng) rồi thêm máy chủ proxy của bạn:
 
 ```
-https://raw.githubusercontent.com/GMOogway/shadowrocket-rules/master/docs/03.shadowsocks_tiny.conf
+https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/docs/03.shadowsocks_tiny.conf
 ```
 
 Đảm bảo phần `[Rule]` kết thúc bằng `FINAL,DIRECT` (cho blacklist mode).
@@ -95,7 +95,7 @@ Bật cấu hình, lưu lượng sẽ được phân luồng chính xác. Khi c�
 
 ## 🔗 Link tải module
 
-Mỗi module có 2 link: `raw.githubusercontent.com` (nhanh, đôi khi cần proxy để tải) và `jsdelivr` (truy cập thẳng, trễ ~12h — không ảnh hưởng gì với list cập nhật theo ngày).
+Mỗi module có 2 link: `raw.githubusercontent.com` (nhanh, đôi khi cần proxy để tải) và `jsdelivr` (truy cập thẳng, có thể trễ vài giờ so với bản mới nhất — không ảnh hưởng đáng kể).
 
 | Module | raw.githubusercontent | jsDelivr (mirror) |
 |--------|-----------------------|-------------------|
@@ -104,6 +104,27 @@ Mỗi module có 2 link: `raw.githubusercontent.com` (nhanh, đôi khi cần pro
 | Zalo & ZaloPay | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/zalo_zalopay.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/zalo_zalopay.module) |
 | Direct (TQ) | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_direct_list.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_direct_list.module) |
 | Reject (ads) | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_reject_list.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_reject_list.module) |
+
+---
+
+## 📁 Cấu trúc repo
+
+```
+shadowrocket-vietnamese/
+├── sr_proxy_list_CN.module     # PROXY - vượt GFW khi ở Trung Quốc
+├── sr_proxy_list_UAE.module    # PROXY - mở OTT VoIP/video khi ở UAE
+├── zalo_zalopay.module         # PROXY - full traffic Zalo/ZaloPay + dải IP VNG
+├── sr_direct_list.module       # DIRECT - domain nội địa TQ (sync upstream)
+├── sr_reject_list.module       # REJECT - quảng cáo/tracker (sync upstream)
+├── docs/                       # Tài liệu tham khảo (xem bên dưới)
+├── README.md
+└── LICENSE
+```
+
+### 📚 Tài liệu tham khảo (`docs/`)
+- [`01.shadowrocket_configure.md`](docs/01.shadowrocket_configure.md) — giới thiệu chi tiết file cấu hình Shadowrocket.
+- [`02.shadowrocket_update_modules.md`](docs/02.shadowrocket_update_modules.md) — cách cập nhật module thủ công/tự động.
+- [`03.shadowsocks_tiny.conf`](docs/03.shadowsocks_tiny.conf) — file config mẫu tối giản (~20 dòng) để bắt đầu.
 
 ---
 
