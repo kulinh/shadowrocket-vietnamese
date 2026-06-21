@@ -1,85 +1,299 @@
-#!name=GFW Optimized 2026
-#!desc=Optimized Proxy Rules for bypassing GFW China 2026 - Enhanced Google Ecosystem (Drive/Docs/Meet/Maps/Photos) + Zoom + Important IP-CIDR
-#!homepage=Custom edited & researched for daily use in China
+#!name=GFW Optimized Proxy List (CN) 2026
+#!desc=Danh sách PROXY tối ưu & toàn diện để vượt GFW khi ở Trung Quốc. Bao phủ đầy đủ: Google/Alphabet (Search/Gmail/Drive/Docs/Meet/Maps/Photos/YouTube/Play/Android/Firebase/GCP/Gemini), Meta (Facebook/Instagram/Threads/Messenger/WhatsApp/Oculus), Telegram, Viber, TikTok, X/Twitter + AI + Dev + Media + CDN. Kèm IP-CIDR cho dịch vụ hay bị nhiễm DNS.
+#!homepage=https://github.com/kulinh/shadowrocket-vietnamese
+
+# ============================================================================
+#  HƯỚNG DẪN DÙNG (BLACKLIST MODE — dành cho khi ở Trung Quốc)
+#  1) Cài đặt > Module: thêm module này. Nếu dùng kèm sr_reject_list (chặn
+#     quảng cáo) thì đặt module reject Ở TRÊN, module proxy này ở dưới.
+#  2) Trong file config (.conf), phần [Rule] dòng CUỐI CÙNG phải là:
+#        FINAL,DIRECT
+#     => Các domain dưới đây đi PROXY (vượt GFW), tất cả phần còn lại đi thẳng.
+#  3) Nếu app nội địa TQ (ngân hàng, 网上国网...) báo lỗi vì phát hiện proxy:
+#        Cài đặt > Proxy > đổi loại proxy từ HTTP sang none (chế độ TUN).
+#  Lưu ý: quy tắc trong module ƯU TIÊN hơn config; module ở trên ưu tiên hơn
+#  module ở dưới. Muốn ghi đè, tạo module nhỏ riêng và đặt lên trên cùng.
+# ============================================================================
+
 [Rule]
+
+# ----------------------------------------------------------------------------
+# GOOGLE / ALPHABET (toàn bộ hệ sinh thái)
+#   *.google.com đã bao trùm: accounts, drive, docs, sheets, slides, meet,
+#   photos, maps, mail, play, news, translate, calendar, chat, gemini, store...
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,google.com,PROXY
 DOMAIN-SUFFIX,googleapis.com,PROXY
 DOMAIN-SUFFIX,gstatic.com,PROXY
+DOMAIN-SUFFIX,googleusercontent.com,PROXY
 DOMAIN-SUFFIX,googlevideo.com,PROXY
+DOMAIN-SUFFIX,ggpht.com,PROXY
+DOMAIN-SUFFIX,gvt1.com,PROXY
+DOMAIN-SUFFIX,gvt2.com,PROXY
+DOMAIN-SUFFIX,gvt3.com,PROXY
+DOMAIN-SUFFIX,1e100.net,PROXY
+DOMAIN-SUFFIX,gmail.com,PROXY
+DOMAIN-SUFFIX,googlemail.com,PROXY
+DOMAIN-SUFFIX,withgoogle.com,PROXY
+DOMAIN-SUFFIX,goo.gl,PROXY
+DOMAIN-SUFFIX,g.co,PROXY
+DOMAIN-SUFFIX,gg.gg,PROXY
+DOMAIN-SUFFIX,google-analytics.com,PROXY
+DOMAIN-SUFFIX,googletagmanager.com,PROXY
+DOMAIN-SUFFIX,googletagservices.com,PROXY
+DOMAIN-SUFFIX,googlesyndication.com,PROXY
+DOMAIN-SUFFIX,googleadservices.com,PROXY
+DOMAIN-SUFFIX,doubleclick.net,PROXY
+DOMAIN-SUFFIX,recaptcha.net,PROXY
+DOMAIN-SUFFIX,ampproject.org,PROXY
+DOMAIN-SUFFIX,googlesource.com,PROXY
+# --- YouTube ---
 DOMAIN-SUFFIX,youtube.com,PROXY
 DOMAIN-SUFFIX,youtu.be,PROXY
 DOMAIN-SUFFIX,ytimg.com,PROXY
-DOMAIN-SUFFIX,ggpht.com,PROXY
-DOMAIN-SUFFIX,googleusercontent.com,PROXY
-DOMAIN-SUFFIX,gmail.com,PROXY
-DOMAIN-SUFFIX,drive.google.com,PROXY
-DOMAIN-SUFFIX,docs.google.com,PROXY
-DOMAIN-SUFFIX,meet.google.com,PROXY
-DOMAIN-SUFFIX,photos.google.com,PROXY
-DOMAIN-SUFFIX,maps.google.com,PROXY
-DOMAIN-SUFFIX,googlemaps.com,PROXY
-DOMAIN-SUFFIX,appspot.com,PROXY
+DOMAIN-SUFFIX,youtube-nocookie.com,PROXY
+DOMAIN-SUFFIX,youtubekids.com,PROXY
+DOMAIN-SUFFIX,yt.be,PROXY
+# --- Android / Play / Chrome ---
+DOMAIN-SUFFIX,android.com,PROXY
 DOMAIN-SUFFIX,dl.google.com,PROXY
-DOMAIN-SUFFIX,gvt1.com,PROXY
-DOMAIN-SUFFIX,gvt2.com,PROXY
-DOMAIN-SUFFIX,1e100.net,PROXY
+DOMAIN-SUFFIX,chromium.org,PROXY
+# --- Firebase / Google Cloud Platform ---
+DOMAIN-SUFFIX,firebaseio.com,PROXY
+DOMAIN-SUFFIX,firebaseapp.com,PROXY
+DOMAIN-SUFFIX,firebasestorage.app,PROXY
+DOMAIN-SUFFIX,firebasedynamiclinks.com,PROXY
+DOMAIN-SUFFIX,appspot.com,PROXY
+DOMAIN-SUFFIX,cloudfunctions.net,PROXY
+DOMAIN-SUFFIX,run.app,PROXY
+DOMAIN-SUFFIX,gcr.io,PROXY
+DOMAIN-SUFFIX,pkg.dev,PROXY
+# --- Khác trong Alphabet ---
+DOMAIN-SUFFIX,blogspot.com,PROXY
+DOMAIN-SUFFIX,blogger.com,PROXY
+DOMAIN-SUFFIX,waze.com,PROXY
+DOMAIN-SUFFIX,nest.com,PROXY
+DOMAIN-SUFFIX,fitbit.com,PROXY
+DOMAIN-SUFFIX,abc.xyz,PROXY
+DOMAIN-SUFFIX,deepmind.com,PROXY
+# --- Bắt mọi domain còn chứa "google" (gồm google.com.hk/.vn/.de... vùng miền) ---
 DOMAIN-KEYWORD,google,PROXY
+DOMAIN-KEYWORD,youtube,PROXY
+# --- IP-CIDR Google (phòng khi DNS bị nhiễm) ---
+IP-CIDR,74.125.0.0/16,PROXY,no-resolve
+IP-CIDR,108.177.0.0/17,PROXY,no-resolve
+IP-CIDR,142.250.0.0/15,PROXY,no-resolve
+IP-CIDR,172.217.0.0/16,PROXY,no-resolve
+IP-CIDR,172.253.0.0/16,PROXY,no-resolve
+IP-CIDR,216.58.192.0/19,PROXY,no-resolve
+IP-CIDR,216.239.32.0/19,PROXY,no-resolve
+IP-CIDR,35.191.0.0/16,PROXY,no-resolve
+IP-CIDR,130.211.0.0/22,PROXY,no-resolve
+
+# ----------------------------------------------------------------------------
+# META (Facebook / Instagram / Threads / Messenger / WhatsApp / Oculus)
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,facebook.com,PROXY
+DOMAIN-SUFFIX,facebook.net,PROXY
 DOMAIN-SUFFIX,fb.com,PROXY
+DOMAIN-SUFFIX,fb.me,PROXY
+DOMAIN-SUFFIX,fb.gg,PROXY
 DOMAIN-SUFFIX,fbcdn.net,PROXY
+DOMAIN-SUFFIX,fbsbx.com,PROXY
+DOMAIN-SUFFIX,facebookmail.com,PROXY
+DOMAIN-SUFFIX,m.me,PROXY
+DOMAIN-SUFFIX,messenger.com,PROXY
 DOMAIN-SUFFIX,instagram.com,PROXY
+DOMAIN-SUFFIX,cdninstagram.com,PROXY
+DOMAIN-SUFFIX,ig.me,PROXY
 DOMAIN-SUFFIX,threads.net,PROXY
-DOMAIN-SUFFIX,meta.com,PROXY
+DOMAIN-SUFFIX,threads.com,PROXY
 DOMAIN-SUFFIX,whatsapp.com,PROXY
 DOMAIN-SUFFIX,whatsapp.net,PROXY
+DOMAIN-SUFFIX,wa.me,PROXY
+DOMAIN-SUFFIX,meta.com,PROXY
+DOMAIN-SUFFIX,meta.ai,PROXY
+DOMAIN-SUFFIX,oculus.com,PROXY
+DOMAIN-SUFFIX,oculuscdn.com,PROXY
+DOMAIN-SUFFIX,workplace.com,PROXY
+DOMAIN-KEYWORD,facebook,PROXY
+DOMAIN-KEYWORD,fbcdn,PROXY
+# --- IP-CIDR Meta/AS32934 (WhatsApp & IG hay nối thẳng bằng IP) ---
+IP-CIDR,31.13.24.0/21,PROXY,no-resolve
+IP-CIDR,31.13.64.0/18,PROXY,no-resolve
+IP-CIDR,45.64.40.0/22,PROXY,no-resolve
+IP-CIDR,66.220.144.0/20,PROXY,no-resolve
+IP-CIDR,69.63.176.0/20,PROXY,no-resolve
+IP-CIDR,69.171.224.0/19,PROXY,no-resolve
+IP-CIDR,74.119.76.0/22,PROXY,no-resolve
+IP-CIDR,102.132.96.0/20,PROXY,no-resolve
+IP-CIDR,129.134.0.0/16,PROXY,no-resolve
+IP-CIDR,157.240.0.0/16,PROXY,no-resolve
+IP-CIDR,173.252.64.0/18,PROXY,no-resolve
+IP-CIDR,179.60.192.0/22,PROXY,no-resolve
+IP-CIDR,185.60.216.0/22,PROXY,no-resolve
+IP-CIDR,204.15.20.0/22,PROXY,no-resolve
+IP-CIDR6,2a03:2880::/32,PROXY,no-resolve
+
+# ----------------------------------------------------------------------------
+# TELEGRAM
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,telegram.org,PROXY
+DOMAIN-SUFFIX,telegram.me,PROXY
+DOMAIN-SUFFIX,t.me,PROXY
+DOMAIN-SUFFIX,telegra.ph,PROXY
+DOMAIN-SUFFIX,telegram.dog,PROXY
+DOMAIN-SUFFIX,tdesktop.com,PROXY
+DOMAIN-SUFFIX,telesco.pe,PROXY
+DOMAIN-SUFFIX,cdn-telegram.org,PROXY
+DOMAIN-SUFFIX,comments.app,PROXY
+DOMAIN-SUFFIX,graph.org,PROXY
+DOMAIN-KEYWORD,telegram,PROXY
+# --- IP-CIDR Telegram (BẮT BUỘC: client nối datacenter bằng IP, DNS không đủ) ---
+IP-CIDR,91.108.4.0/22,PROXY,no-resolve
+IP-CIDR,91.108.8.0/22,PROXY,no-resolve
+IP-CIDR,91.108.12.0/22,PROXY,no-resolve
+IP-CIDR,91.108.16.0/22,PROXY,no-resolve
+IP-CIDR,91.108.20.0/22,PROXY,no-resolve
+IP-CIDR,91.108.56.0/22,PROXY,no-resolve
+IP-CIDR,95.161.64.0/20,PROXY,no-resolve
+IP-CIDR,149.154.160.0/20,PROXY,no-resolve
+IP-CIDR,149.154.164.0/22,PROXY,no-resolve
+IP-CIDR6,2001:67c:4e8::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23c::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23d::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23f::/48,PROXY,no-resolve
+
+# ----------------------------------------------------------------------------
+# VIBER
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,viber.com,PROXY
+DOMAIN-SUFFIX,viber.net,PROXY
+DOMAIN-KEYWORD,viber,PROXY
+
+# ----------------------------------------------------------------------------
+# TIKTOK (bản quốc tế)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,tiktok.com,PROXY
+DOMAIN-SUFFIX,tiktokv.com,PROXY
+DOMAIN-SUFFIX,tiktokv.us,PROXY
+DOMAIN-SUFFIX,tiktokcdn.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn-us.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn-eu.com,PROXY
+DOMAIN-SUFFIX,byteoversea.com,PROXY
+DOMAIN-SUFFIX,ibytedtos.com,PROXY
+DOMAIN-SUFFIX,ibyteimg.com,PROXY
+DOMAIN-SUFFIX,byteimg.com,PROXY
+DOMAIN-SUFFIX,ttwstatic.com,PROXY
+DOMAIN-SUFFIX,muscdn.com,PROXY
+DOMAIN-SUFFIX,musical.ly,PROXY
+DOMAIN-SUFFIX,isnssdk.com,PROXY
+DOMAIN-SUFFIX,ttlivecdn.com,PROXY
+DOMAIN-KEYWORD,tiktok,PROXY
+
+# ----------------------------------------------------------------------------
+# X / TWITTER
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,x.com,PROXY
 DOMAIN-SUFFIX,twitter.com,PROXY
 DOMAIN-SUFFIX,t.co,PROXY
 DOMAIN-SUFFIX,twimg.com,PROXY
-DOMAIN-SUFFIX,tiktok.com,PROXY
-DOMAIN-SUFFIX,tiktokv.com,PROXY
-DOMAIN-SUFFIX,byteoversea.com,PROXY
-DOMAIN-SUFFIX,netflix.com,PROXY
-DOMAIN-SUFFIX,nflxvideo.net,PROXY
-DOMAIN-SUFFIX,nflxext.com,PROXY
-DOMAIN-SUFFIX,telegram.org,PROXY
-DOMAIN-SUFFIX,t.me,PROXY
-DOMAIN-SUFFIX,telegra.ph,PROXY
+DOMAIN-KEYWORD,twitter,PROXY
+
+# ----------------------------------------------------------------------------
+# NHẮN TIN KHÁC (LINE / Signal)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,line.me,PROXY
+DOMAIN-SUFFIX,line-scdn.net,PROXY
+DOMAIN-SUFFIX,line-apps.com,PROXY
+DOMAIN-SUFFIX,naver.jp,PROXY
+DOMAIN-SUFFIX,signal.org,PROXY
+DOMAIN-SUFFIX,signal.art,PROXY
+
+# ----------------------------------------------------------------------------
+# CHAT / HỌP TRỰC TUYẾN
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,discord.com,PROXY
 DOMAIN-SUFFIX,discordapp.com,PROXY
 DOMAIN-SUFFIX,discordapp.net,PROXY
 DOMAIN-SUFFIX,discord.gg,PROXY
+DOMAIN-SUFFIX,discord.media,PROXY
 DOMAIN-SUFFIX,slack.com,PROXY
+DOMAIN-SUFFIX,slack-edge.com,PROXY
 DOMAIN-SUFFIX,zoom.us,PROXY
 DOMAIN-SUFFIX,zoom.com,PROXY
-DOMAIN-SUFFIX,viber.com,PROXY
-DOMAIN-SUFFIX,github.com,PROXY
-DOMAIN-SUFFIX,githubusercontent.com,PROXY
-DOMAIN-SUFFIX,githubassets.com,PROXY
-DOMAIN-SUFFIX,ghcr.io,PROXY
-DOMAIN-SUFFIX,github.io,PROXY
+
+# ----------------------------------------------------------------------------
+# AI
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,openai.com,PROXY
 DOMAIN-SUFFIX,chatgpt.com,PROXY
-DOMAIN-SUFFIX,ai.com,PROXY
 DOMAIN-SUFFIX,oaiusercontent.com,PROXY
+DOMAIN-SUFFIX,oaistatic.com,PROXY
+DOMAIN-SUFFIX,ai.com,PROXY
 DOMAIN-SUFFIX,anthropic.com,PROXY
 DOMAIN-SUFFIX,claude.ai,PROXY
 DOMAIN-SUFFIX,x.ai,PROXY
-DOMAIN-SUFFIX,grok.x.ai,PROXY
+DOMAIN-SUFFIX,grok.com,PROXY
+DOMAIN-SUFFIX,perplexity.ai,PROXY
+DOMAIN-SUFFIX,huggingface.co,PROXY
+
+# ----------------------------------------------------------------------------
+# DEV (GitHub...)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,github.com,PROXY
+DOMAIN-SUFFIX,githubusercontent.com,PROXY
+DOMAIN-SUFFIX,githubassets.com,PROXY
+DOMAIN-SUFFIX,github.io,PROXY
+DOMAIN-SUFFIX,ghcr.io,PROXY
+DOMAIN-SUFFIX,gitlab.com,PROXY
+DOMAIN-SUFFIX,sourceforge.net,PROXY
+DOMAIN-SUFFIX,docker.com,PROXY
+DOMAIN-SUFFIX,npmjs.com,PROXY
+
+# ----------------------------------------------------------------------------
+# MEDIA / MẠNG XÃ HỘI / TRA CỨU (thường bị chặn ở TQ)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,netflix.com,PROXY
+DOMAIN-SUFFIX,nflxvideo.net,PROXY
+DOMAIN-SUFFIX,nflxext.com,PROXY
+DOMAIN-SUFFIX,nflximg.net,PROXY
+DOMAIN-SUFFIX,spotify.com,PROXY
+DOMAIN-SUFFIX,scdn.co,PROXY
+DOMAIN-SUFFIX,spotifycdn.com,PROXY
+DOMAIN-SUFFIX,twitch.tv,PROXY
+DOMAIN-SUFFIX,ttvnw.net,PROXY
+DOMAIN-SUFFIX,jtvnw.net,PROXY
+DOMAIN-SUFFIX,vimeo.com,PROXY
+DOMAIN-SUFFIX,vimeocdn.com,PROXY
+DOMAIN-SUFFIX,reddit.com,PROXY
+DOMAIN-SUFFIX,redd.it,PROXY
+DOMAIN-SUFFIX,redditstatic.com,PROXY
+DOMAIN-SUFFIX,redditmedia.com,PROXY
+DOMAIN-SUFFIX,pinterest.com,PROXY
+DOMAIN-SUFFIX,pinimg.com,PROXY
+DOMAIN-SUFFIX,imgur.com,PROXY
+DOMAIN-SUFFIX,medium.com,PROXY
+DOMAIN-SUFFIX,quora.com,PROXY
+DOMAIN-SUFFIX,wikipedia.org,PROXY
+DOMAIN-SUFFIX,wikimedia.org,PROXY
+DOMAIN-SUFFIX,bbc.com,PROXY
+DOMAIN-SUFFIX,bbc.co.uk,PROXY
+DOMAIN-SUFFIX,dropbox.com,PROXY
+DOMAIN-SUFFIX,dropboxusercontent.com,PROXY
+
+# ----------------------------------------------------------------------------
+# CDN LỚN (chỉ bắt domain CDN của chính nhà cung cấp, không ảnh hưởng site TQ)
+# ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,akamai.net,PROXY
 DOMAIN-SUFFIX,akamaized.net,PROXY
+DOMAIN-SUFFIX,akamaihd.net,PROXY
 DOMAIN-SUFFIX,edgekey.net,PROXY
+DOMAIN-SUFFIX,edgesuite.net,PROXY
 DOMAIN-SUFFIX,cloudfront.net,PROXY
-DOMAIN-SUFFIX,amazonaws.com,PROXY
 DOMAIN-SUFFIX,fastly.net,PROXY
+DOMAIN-SUFFIX,fastlylb.net,PROXY
 DOMAIN-SUFFIX,azureedge.net,PROXY
 DOMAIN-SUFFIX,cloudflare.com,PROXY
 DOMAIN-SUFFIX,jsdelivr.net,PROXY
-IP-CIDR,74.125.0.0/16,PROXY,no-resolve
-IP-CIDR,172.217.0.0/16,PROXY,no-resolve
-IP-CIDR,142.250.0.0/15,PROXY,no-resolve
-IP-CIDR,108.177.0.0/17,PROXY,no-resolve
-IP-CIDR,35.191.0.0/16,PROXY,no-resolve
-IP-CIDR,130.211.0.0/22,PROXY,no-resolve
-IP-CIDR,91.108.4.0/22,PROXY,no-resolve
-IP-CIDR,149.154.160.0/20,PROXY,no-resolve
+DOMAIN-SUFFIX,unpkg.com,PROXY
