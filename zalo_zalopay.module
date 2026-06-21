@@ -1,25 +1,19 @@
-#!name=Zalo & ZaloPay Full Proxy (Updated 2026)
-#!desc=Comprehensive Zalo + ZaloPay domains for bypassing GFW China - Includes all core, API, media storage & merchant portals (researched May 2026)
-#!homepage=Custom module based on official docs & public subdomain scans
+#!name=Zalo & ZaloPay Full Proxy + IP Ranges (2026)
+#!desc=Route TOÀN BỘ traffic Zalo & ZaloPay qua proxy (chế độ thử nghiệm). Gồm đầy đủ domain (chat/API/media/thanh toán/merchant) + toàn bộ dải IP của VNG Corporation (AS38244) đã gộp tối thiểu. Lưu ý: dải IP VNG dùng chung cho mọi sản phẩm VNG, không tách riêng Zalo được.
+#!homepage=https://github.com/kulinh/shadowrocket-vietnamese
+
 [Rule]
 
-# === Zalo Core & API Domains ===
+# ============================================================================
+#  DOMAIN — Zalo
+# ============================================================================
 DOMAIN-SUFFIX,zalo.me,PROXY
 DOMAIN-SUFFIX,zaloapp.com,PROXY
 DOMAIN-SUFFIX,dlfl.me,PROXY
 DOMAIN-SUFFIX,dlfl.vn,PROXY
 
-# Zalo important subdomains
-DOMAIN-SUFFIX,api.zalo.me,PROXY
-DOMAIN-SUFFIX,chat.zalo.me,PROXY
-DOMAIN-SUFFIX,video.zalo.me,PROXY
-DOMAIN-SUFFIX,oa.zalo.me,PROXY
-DOMAIN-SUFFIX,pay.zalo.me,PROXY
-DOMAIN-SUFFIX,connect.zalo.me,PROXY
-
-# === Zalo Media / File Storage (quan trọng cho gửi ảnh, video, file) ===
+# --- Zalo media / file storage (ảnh, video, file đính kèm) ---
 DOMAIN-SUFFIX,zadn.vn,PROXY
-DOMAIN-SUFFIX,zalo-api.zadn.vn,PROXY
 DOMAIN-SUFFIX,zdn.vn,PROXY
 DOMAIN-SUFFIX,cscpdl.com,PROXY
 DOMAIN-SUFFIX,cscfdl.com,PROXY
@@ -28,20 +22,32 @@ DOMAIN-SUFFIX,cscvdlz.com,PROXY
 DOMAIN-SUFFIX,social-dl.com,PROXY
 DOMAIN-SUFFIX,social-dl-z.com,PROXY
 
-# === ZaloPay Core & Payment Domains ===
+# ============================================================================
+#  DOMAIN — ZaloPay
+# ============================================================================
 DOMAIN-SUFFIX,zalopay.vn,PROXY
-DOMAIN-SUFFIX,openapi.zalopay.vn,PROXY
-DOMAIN-SUFFIX,sb-openapi.zalopay.vn,PROXY
-DOMAIN-SUFFIX,api.zalopay.vn,PROXY
-DOMAIN-SUFFIX,apimep.zalopay.vn,PROXY
-DOMAIN-SUFFIX,sbapimep.zalopay.vn,PROXY
-DOMAIN-SUFFIX,developer.zalopay.vn,PROXY
-DOMAIN-SUFFIX,qrpay.zalopay.vn,PROXY
-DOMAIN-SUFFIX,gateway.zalopay.vn,PROXY
-DOMAIN-SUFFIX,sbgateway.zalopay.vn,PROXY
+DOMAIN-SUFFIX,zalopay.com.vn,PROXY
+DOMAIN-SUFFIX,zlp.vn,PROXY
 
-# ZaloPay merchant & additional payment
-DOMAIN-SUFFIX,mc.zalopay.vn,PROXY
-DOMAIN-SUFFIX,sbmc.zalopay.vn,PROXY
+# --- Bắt mọi domain còn chứa "zalo"/"zalopay" (phòng subdomain lạ) ---
+DOMAIN-KEYWORD,zalopay,PROXY
+DOMAIN-KEYWORD,zalo,PROXY
 
-# Kết thúc module
+# ============================================================================
+#  IP-CIDR — Toàn bộ dải IP VNG Corporation (AS38244 / VINAGAME-AS-VN)
+#  Nguồn: RIPEstat announced-prefixes, đã gộp tối thiểu (125 -> 9 prefix v4).
+#  Cảnh báo: đây là toàn bộ không gian IP của VNG, dùng chung cho Zalo,
+#  ZaloPay, ZingMP3, games VNG, VNG Cloud... nên sẽ route luôn các dịch vụ đó.
+# ============================================================================
+IP-CIDR,45.127.252.0/22,PROXY,no-resolve
+IP-CIDR,49.213.64.0/18,PROXY,no-resolve
+IP-CIDR,58.84.0.0/22,PROXY,no-resolve
+IP-CIDR,61.28.224.0/19,PROXY,no-resolve
+IP-CIDR,103.196.236.0/22,PROXY,no-resolve
+IP-CIDR,103.245.248.0/22,PROXY,no-resolve
+IP-CIDR,118.102.0.0/21,PROXY,no-resolve
+IP-CIDR,120.138.64.0/20,PROXY,no-resolve
+IP-CIDR,122.201.8.0/21,PROXY,no-resolve
+IP-CIDR6,2001:df0:13::/48,PROXY,no-resolve
+IP-CIDR6,2001:df0:1a::/48,PROXY,no-resolve
+IP-CIDR6,2402:4e0::/32,PROXY,no-resolve
