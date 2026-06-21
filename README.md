@@ -126,6 +126,13 @@ shadowrocket-vietnamese/
 - [`02.shadowrocket_update_modules.md`](docs/02.shadowrocket_update_modules.md) — cách cập nhật module thủ công/tự động.
 - [`03.shadowsocks_tiny.conf`](docs/03.shadowsocks_tiny.conf) — file config mẫu tối giản (~20 dòng) để bắt đầu.
 
+### 🤖 Dùng cho v2rayNG (Android)
+File `.module` **không** dùng trực tiếp trên v2rayNG (khác nhân/định dạng). Em đã chuyển sẵn rule proxy sang định dạng routing Xray — dán khối `"routing"` vào `config.json` của v2rayNG (cần đủ outbound tag `proxy`/`direct`/`block`):
+- [`docs/v2rayng_routing_CN.json`](docs/v2rayng_routing_CN.json) — kịch bản **Trung Quốc** (kèm `geosite:cn`/`geoip:cn` đi thẳng).
+- [`docs/v2rayng_routing_UAE.json`](docs/v2rayng_routing_UAE.json) — kịch bản **UAE** (mở OTT VoIP/video).
+
+> Cả hai đã tích hợp chặn quảng cáo qua `geosite:category-ads-all` và mô phỏng `FINAL,DIRECT` bằng rule catch-all → thay luôn cho các file `.module` tương ứng trên Android.
+
 ---
 
 ## ❓ Câu hỏi thường gặp
