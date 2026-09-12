@@ -112,6 +112,7 @@ Mỗi module có 2 link: `raw.githubusercontent.com` (nhanh, đôi khi cần pro
 ```
 shadowrocket-vietnamese/
 ├── sr_proxy_list_CN.module     # PROXY - vượt GFW khi ở Trung Quốc
+├── sr_proxy_list_CN.list       # bản RULE-SET của module trên (sinh tự động)
 ├── sr_proxy_list_UAE.module    # PROXY - mở OTT VoIP/video khi ở UAE
 ├── zalo_zalopay.module         # PROXY - full traffic Zalo/ZaloPay + dải IP VNG
 ├── sr_direct_list.module       # DIRECT - domain nội địa TQ (sync upstream)
@@ -137,28 +138,42 @@ Nếu bạn dùng fleet **cf-vpn** thì panel sinh sẵn một config Shadowrock
 | `HY2-BACKUP` | select | toàn bộ đường Hysteria2 (UDP) — dùng tay khi TCP 443 bị bóp |
 | `PROXY` | select | `AUTO`, `HY2-BACKUP` rồi từng node lẻ (kể cả `XHTTP-Direct` không qua Cloudflare) |
 
-Mọi rule trong `sr_proxy_list_CN.module` trỏ tới policy **`PROXY`**, tức là
-group `PROXY` của config (mặc định chọn `AUTO`). Cách ghép, đúng thứ tự:
+**Config đó đã nhúng sẵn toàn bộ rule của `sr_proxy_list_CN.module`**: mỗi
+lần sinh config, Worker của panel tải module này từ GitHub (tại edge
+Cloudflare, nơi GitHub không bị chặn) và chép các rule vào phần `[Rule]`, trỏ
+tới group **`PROXY`** (mặc định chọn `AUTO`). Điện thoại ở Trung Quốc không cần
+tới GitHub, không cần cài module, và sửa module ở đây → lần refresh config sau
+tự có. Cách ghép, đúng thứ tự:
 
 1. **Subscription**: thêm link base64 của panel (để có node).
 2. **Config**: *Cấu hình → Tệp từ xa*, dán link `?format=shadowrocket`. Phần
-   `[Rule]` của config kết thúc bằng **`FINAL,DIRECT`** (blacklist mode) và có
-   sẵn 2 rule đưa chính panel + trang đăng nhập Cloudflare Access qua proxy.
-3. **Module**: thêm `sr_reject_list` (trên), `sr_proxy_list_CN`, `zalo_zalopay`
-   như hướng dẫn ở trên.
+   `[Rule]` của config: 2 rule đưa chính panel + trang đăng nhập Cloudflare
+   Access qua proxy → toàn bộ rule của module này → **`FINAL,DIRECT`**
+   (blacklist mode).
+3. **Module**: chỉ cần `sr_reject_list` (chặn quảng cáo) và `zalo_zalopay` nếu
+   muốn; **không** thêm `sr_proxy_list_CN` nữa (thêm cũng không hại, chỉ trùng).
 4. Trên màn hình chính chọn group **`PROXY`** (hoặc `AUTO`), *Cài đặt → Định
-   tuyến toàn cục* = **Cấu hình**. Ở Trung Quốc: chỉ những gì module liệt kê mới
-   qua VPN, còn lại đi thẳng.
+   tuyến toàn cục* = **Cấu hình**. Ở Trung Quốc: chỉ những gì danh sách liệt kê
+   mới qua VPN, còn lại đi thẳng.
 5. **Ở nhà (Việt Nam)** muốn mọi thứ qua VPN: dùng link
-   `?format=shadowrocket&final=proxy` (config kết thúc bằng `FINAL,PROXY`),
-   hoặc đơn giản đổi *Định tuyến toàn cục* sang **Proxy**.
+   `?format=shadowrocket&final=proxy` (config kết thúc bằng `FINAL,PROXY`, không
+   nhúng rule), hoặc đơn giản đổi *Định tuyến toàn cục* sang **Proxy**.
 
-Không nên đưa node cf-vpn vào rule của module: địa chỉ máy chủ proxy được
-Shadowrocket tự loại khỏi rule, và module này là danh sách chung cho mọi người.
+Tuỳ chọn trên URL config: `&rules=none` → không nhúng, để tự nạp module bằng
+tay. Nếu lúc sinh config Worker không tải được GitHub, config sẽ có dòng
+`RULE-SET,…/sr_proxy_list_CN.list,PROXY` thay cho phần nhúng (Shadowrocket tự
+tải, cần mạng tới GitHub) — refresh lại config sau để có bản nhúng.
+
+Không nên đưa **config** `RWL8899.conf` vào repo này: nó chứa UUID/mật khẩu
+node của từng người dùng (repo public), và module Shadowrocket vốn không chứa
+được `[Proxy]`/`[Proxy Group]`. Cũng không đưa node cf-vpn vào rule của
+module: địa chỉ máy chủ proxy được Shadowrocket tự loại khỏi rule, và module
+này là danh sách chung cho mọi người.
 
 ### 🔁 Giữ ruleset v2rayNG đồng bộ với module
 
-`docs/v2rayng_rulesets_CN.json` được **sinh tự động** từ
+`docs/v2rayng_rulesets_CN.json` và `sr_proxy_list_CN.list` (bản RULE-SET cho
+Shadowrocket/Surge/Loon, không policy) được **sinh tự động** từ
 `sr_proxy_list_CN.module` bằng `docs/module2v2rayng.py` (DOMAIN-SUFFIX →
 `domain:`, DOMAIN → `full:`, DOMAIN-KEYWORD → `keyword:`, IP-CIDR → `ip`).
 Sau khi sửa module, chạy:

@@ -14,9 +14,11 @@
 #  Lưu ý: quy tắc trong module ƯU TIÊN hơn config; module ở trên ưu tiên hơn
 #  module ở dưới. Muốn ghi đè, tạo module nhỏ riêng và đặt lên trên cùng.
 #  4) Dùng chung với config sinh từ panel cf-vpn (RWL8899.conf, có group AUTO /
-#     HY2-BACKUP / PROXY): mọi rule dưới đây trỏ tới policy PROXY, tức là group
-#     PROXY của config (mặc định = AUTO url-test). Trên màn hình chính chọn
-#     group PROXY (hoặc AUTO). Xem README mục "Dùng với cf-vpn".
+#     HY2-BACKUP / PROXY): config đó đã NHÚNG SẴN toàn bộ rule của file này
+#     (Worker tải module lúc sinh config) nên KHÔNG cần thêm module nữa; mọi
+#     rule trỏ tới policy PROXY = group PROXY của config (mặc định AUTO).
+#     Chỉ thêm module khi dùng config tự viết. Xem README mục "Dùng với cf-vpn".
+#     Bản RULE-SET (không policy): sr_proxy_list_CN.list cùng thư mục.
 #  Nguồn đối chiếu (09/2026): gfwlist, gstatic.com/ipranges/goog.json,
 #  RIPEstat announced-prefixes AS32934 (Meta), AS62014/62041/59930/44907/211157
 #  (Telegram). Xem README để biết cách sinh lại ruleset v2rayNG từ file này.
