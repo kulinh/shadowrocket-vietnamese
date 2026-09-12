@@ -31,7 +31,7 @@ Repo dùng dạng **module rule** thay vì file config đầy đủ — gọn g�
 | Module | Mục đích | Loại |
 |--------|----------|------|
 | [`sr_proxy_list_CN.module`](sr_proxy_list_CN.module) | **Vượt GFW ở Trung Quốc.** Bao phủ toàn diện Google/Alphabet, Meta, Telegram, Viber, TikTok, X, LINE/Kakao/Naver, AI, Dev, Media/Streaming, báo chí quốc tế + DNS công cộng + IP-CIDR đối chiếu BGP (09/2026) cho dịch vụ hay bị nhiễm DNS | PROXY (blacklist) |
-| [`sr_proxy_list_UAE.module`](sr_proxy_list_UAE.module) | **Vượt firewall TDRA ở UAE.** Mở VoIP, nội dung bị chặn & dịch vụ thiết yếu | PROXY (blacklist) |
+| [`sr_proxy_list_UAE.module`](sr_proxy_list_UAE.module) | **Vượt firewall TDRA ở UAE.** Mở cuộc gọi OTT (WhatsApp, FaceTime, Messenger, Viber, Zalo, Telegram, Signal, Discord, imo, Snapchat, LINE, Kakao, WeChat) + IP-CIDR media relay đối chiếu BGP 09/2026; các nhóm site TDRA chặn hẳn (kiểm chứng du + Etisalat 12/09/2026); DNS công cộng. Không proxy thứ mở bình thường ở UAE (Google/YouTube/Netflix/X/TikTok, Teams/Meet/Zoom, CDN) | PROXY (blacklist) |
 | [`zalo_zalopay.module`](zalo_zalopay.module) | Route **toàn bộ** traffic Zalo/ZaloPay qua proxy: đầy đủ domain (chat/API/media/thanh toán) **+ toàn bộ dải IP VNG (AS38244)** đã gộp tối thiểu | PROXY |
 | [`sr_direct_list.module`](sr_direct_list.module) | ~115.000 domain nội địa TQ → đi thẳng (dùng cho **whitelist mode**) | DIRECT |
 | [`sr_reject_list.module`](sr_reject_list.module) | ~175.000 domain quảng cáo / tracker → chặn | REJECT |
@@ -82,7 +82,7 @@ https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_proxy
 https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/zalo_zalopay.module
 ```
 
-**Khi ở UAE 🇦🇪**
+**Khi ở UAE 🇦🇪** (KHÔNG nạp `zalo_zalopay` ở UAE: nó ép Zalo đi thẳng, cuộc gọi Zalo sẽ bị chặn)
 ```
 https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_reject_list.module
 https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_proxy_list_UAE.module
@@ -114,6 +114,7 @@ shadowrocket-vietnamese/
 ├── sr_proxy_list_CN.module     # PROXY - vượt GFW khi ở Trung Quốc
 ├── sr_proxy_list_CN.list       # bản RULE-SET của module trên (sinh tự động)
 ├── sr_proxy_list_UAE.module    # PROXY - mở OTT VoIP/video khi ở UAE
+├── sr_proxy_list_UAE.list      # bản RULE-SET của module trên (sinh tự động)
 ├── zalo_zalopay.module         # PROXY - full traffic Zalo/ZaloPay + dải IP VNG
 ├── sr_direct_list.module       # DIRECT - domain nội địa TQ (sync upstream)
 ├── sr_reject_list.module       # REJECT - quảng cáo/tracker (sync upstream)
@@ -159,8 +160,12 @@ tự có. Cách ghép, đúng thứ tự:
    `?format=shadowrocket&final=proxy` (config kết thúc bằng `FINAL,PROXY`, không
    nhúng rule), hoặc đơn giản đổi *Định tuyến toàn cục* sang **Proxy**.
 
-Tuỳ chọn trên URL config: `&rules=none` → không nhúng, để tự nạp module bằng
-tay. Nếu lúc sinh config Worker không tải được GitHub, config sẽ có dòng
+**Ở UAE 🇦🇪:** dùng link `?format=shadowrocket&rules=uae` — Worker nhúng
+`sr_proxy_list_UAE.module` thay vì bản CN (mở cuộc gọi OTT + IP media relay,
+site TDRA chặn). Nhớ bỏ module `zalo_zalopay` khi ở UAE.
+
+Tuỳ chọn trên URL config: `&rules=cn` (mặc định) / `&rules=uae` chọn danh sách
+nhúng; `&rules=none` → không nhúng, để tự nạp module bằng tay. Nếu lúc sinh config Worker không tải được GitHub, config sẽ có dòng
 `RULE-SET,…/sr_proxy_list_CN.list,PROXY` thay cho phần nhúng (Shadowrocket tự
 tải, cần mạng tới GitHub) — refresh lại config sau để có bản nhúng.
 
@@ -172,11 +177,11 @@ này là danh sách chung cho mọi người.
 
 ### 🔁 Giữ ruleset v2rayNG đồng bộ với module
 
-`docs/v2rayng_rulesets_CN.json` và `sr_proxy_list_CN.list` (bản RULE-SET cho
-Shadowrocket/Surge/Loon, không policy) được **sinh tự động** từ
-`sr_proxy_list_CN.module` bằng `docs/module2v2rayng.py` (DOMAIN-SUFFIX →
-`domain:`, DOMAIN → `full:`, DOMAIN-KEYWORD → `keyword:`, IP-CIDR → `ip`).
-Sau khi sửa module, chạy:
+`docs/v2rayng_rulesets_{CN,UAE}.json` và `sr_proxy_list_{CN,UAE}.list` (bản
+RULE-SET cho Shadowrocket/Surge/Loon, không policy) được **sinh tự động** từ
+`sr_proxy_list_{CN,UAE}.module` bằng `docs/module2v2rayng.py` (DOMAIN-SUFFIX →
+`domain:`, DOMAIN → `full:`, DOMAIN-KEYWORD → `keyword:`, IP-CIDR → `ip`; bản
+UAE không có hai ruleset "Direct - China"). Sau khi sửa module, chạy:
 
 ```bash
 python3 docs/module2v2rayng.py          # ghi lại JSON

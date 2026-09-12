@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Sinh docs/v2rayng_rulesets_CN.json và sr_proxy_list_CN.list từ sr_proxy_list_CN.module.
+"""Sinh docs/v2rayng_rulesets_<VÙNG>.json và sr_proxy_list_<VÙNG>.list từ
+sr_proxy_list_<VÙNG>.module (VÙNG = CN, UAE).
 
-Giữ hai file luôn đồng bộ: mọi DOMAIN-SUFFIX / DOMAIN / DOMAIN-KEYWORD / IP-CIDR
+Giữ các file luôn đồng bộ: mọi DOMAIN-SUFFIX / DOMAIN / DOMAIN-KEYWORD / IP-CIDR
 trong module được chuyển sang cú pháp routing của Xray (domain:/full:/keyword:
 và CIDR), bọc trong bộ ruleset cố định của v2rayNG 2.2.x (chặn quảng cáo,
-bypass LAN, proxy, direct CN, FINAL direct).
+bypass LAN, proxy, [CN: direct China], FINAL direct).
 
-    python3 docs/module2v2rayng.py            # ghi đè JSON + sr_proxy_list_CN.list
+    python3 docs/module2v2rayng.py            # ghi đè JSON + .list cho mọi vùng
+    python3 docs/module2v2rayng.py CN         # chỉ một vùng
     python3 docs/module2v2rayng.py --check    # chỉ báo lệch, exit 1 nếu file cũ
 
-sr_proxy_list_CN.list là bản RULE-SET (mỗi dòng TYPE,value, không policy) cho
-Shadowrocket/Surge/Loon; config RWL8899.conf của cf-vpn dùng nó làm fallback
-khi Worker không tải được module để nhúng thẳng vào [Rule].
+sr_proxy_list_<VÙNG>.list là bản RULE-SET (mỗi dòng TYPE,value, không policy)
+cho Shadowrocket/Surge/Loon; config RWL8899.conf của cf-vpn dùng nó làm
+fallback khi Worker không tải được module để nhúng thẳng vào [Rule].
 
 Thứ tự trong JSON = thứ tự xuất hiện trong module (không sort), để diff dễ đọc.
 """
@@ -20,33 +22,17 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-MODULE = os.path.join(HERE, "..", "sr_proxy_list_CN.module")
-OUT = os.path.join(HERE, "v2rayng_rulesets_CN.json")
-OUT_LIST = os.path.join(HERE, "..", "sr_proxy_list_CN.list")
+ROOT = os.path.join(HERE, "..")
+REGIONS = ("CN", "UAE")
 
 RULE_TYPES = ("DOMAIN-SUFFIX", "DOMAIN", "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6",
               "USER-AGENT", "URL-REGEX", "GEOIP", "IP-ASN")
 
 
-def build_list(path):
-    """Các dòng rule của module, bỏ policy, giữ cờ no-resolve (định dạng RULE-SET)."""
-    out, seen = [], set()
-    for raw in open(path, encoding="utf-8"):
-        line = raw.strip()
-        if not line or line.startswith("#") or line.startswith("["):
-            continue
-        parts = [p.strip() for p in line.split(",")]
-        if parts[0] not in RULE_TYPES or len(parts) < 2:
-            continue
-        flags = [f for f in parts[3:] if f.lower() == "no-resolve"]
-        entry = ",".join([parts[0], parts[1]] + flags)
-        if entry not in seen:
-            seen.add(entry)
-            out.append(entry)
-    header = ("# sr_proxy_list_CN.list — sinh tự động từ sr_proxy_list_CN.module (không sửa tay).\n"
-              "# Dùng làm RULE-SET: RULE-SET,https://raw.githubusercontent.com/kulinh/"
-              "shadowrocket-vietnamese/master/sr_proxy_list_CN.list,PROXY\n")
-    return header + "\n".join(out) + "\n"
+def paths(region):
+    return (os.path.join(ROOT, f"sr_proxy_list_{region}.module"),
+            os.path.join(HERE, f"v2rayng_rulesets_{region}.json"),
+            os.path.join(ROOT, f"sr_proxy_list_{region}.list"))
 
 
 def parse(path):
@@ -77,40 +63,69 @@ def parse(path):
     return domains, ips
 
 
-def build(domains, ips):
-    return [
+def build(region, domains, ips):
+    rules = [
         {"remarks": "Chan quang cao", "outboundTag": "block", "domain": ["geosite:category-ads-all"]},
         {"remarks": "Bypass LAN (IP)", "outboundTag": "direct", "ip": ["geoip:private"]},
         {"remarks": "Bypass LAN (domain)", "outboundTag": "direct", "domain": ["geosite:private"]},
         {"remarks": "Proxy - domain list", "outboundTag": "proxy", "domain": domains},
         {"remarks": "Proxy - IP ranges", "outboundTag": "proxy", "ip": ips},
-        {"remarks": "Direct - China domain", "outboundTag": "direct", "domain": ["geosite:cn"]},
-        {"remarks": "Direct - China IP", "outboundTag": "direct", "ip": ["geoip:cn"]},
-        {"remarks": "FINAL - phan con lai di thang", "outboundTag": "direct", "port": "0-65535"},
     ]
+    if region == "CN":  # trang TQ đi thẳng để khỏi vòng qua proxy
+        rules += [
+            {"remarks": "Direct - China domain", "outboundTag": "direct", "domain": ["geosite:cn"]},
+            {"remarks": "Direct - China IP", "outboundTag": "direct", "ip": ["geoip:cn"]},
+        ]
+    rules.append({"remarks": "FINAL - phan con lai di thang", "outboundTag": "direct", "port": "0-65535"})
+    return rules
+
+
+def build_list(region, path):
+    """Các dòng rule của module, bỏ policy, giữ cờ no-resolve (định dạng RULE-SET)."""
+    out, seen = [], set()
+    for raw in open(path, encoding="utf-8"):
+        line = raw.strip()
+        if not line or line.startswith("#") or line.startswith("["):
+            continue
+        parts = [p.strip() for p in line.split(",")]
+        if parts[0] not in RULE_TYPES or len(parts) < 2:
+            continue
+        flags = [f for f in parts[3:] if f.lower() == "no-resolve"]
+        entry = ",".join([parts[0], parts[1]] + flags)
+        if entry not in seen:
+            seen.add(entry)
+            out.append(entry)
+    header = (f"# sr_proxy_list_{region}.list — sinh tự động từ sr_proxy_list_{region}.module (không sửa tay).\n"
+              f"# Dùng làm RULE-SET: RULE-SET,https://raw.githubusercontent.com/kulinh/"
+              f"shadowrocket-vietnamese/master/sr_proxy_list_{region}.list,PROXY\n")
+    return header + "\n".join(out) + "\n"
 
 
 def main():
-    domains, ips = parse(MODULE)
-    text = json.dumps(build(domains, ips), indent=2, ensure_ascii=False) + "\n"
-    lst = build_list(MODULE)
-    outputs = [(OUT, text, f"{len(domains)} domain, {len(ips)} IP"),
-               (OUT_LIST, lst, f"{lst.count(chr(10)) - 2} rule")]
-    if "--check" in sys.argv:
-        rc = 0
+    check = "--check" in sys.argv
+    regions = [a for a in sys.argv[1:] if a in REGIONS] or list(REGIONS)
+    rc = 0
+    for region in regions:
+        module, out_json, out_list = paths(region)
+        domains, ips = parse(module)
+        text = json.dumps(build(region, domains, ips), indent=2, ensure_ascii=False) + "\n"
+        lst = build_list(region, module)
+        outputs = [(out_json, text, f"{len(domains)} domain, {len(ips)} IP"),
+                   (out_list, lst, f"{lst.count(chr(10)) - 2} rule")]
         for path, want, desc in outputs:
-            current = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
-            if current == want:
-                print(f"OK: {os.path.relpath(path)} khớp module ({desc})")
+            rel = os.path.relpath(path)
+            if check:
+                current = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
+                if current == want:
+                    print(f"OK: {rel} khớp module ({desc})")
+                else:
+                    print(f"LỆCH: {rel} — chạy lại không có --check để cập nhật")
+                    rc = 1
             else:
-                print(f"LỆCH: {os.path.relpath(path)} — chạy lại không có --check để cập nhật")
-                rc = 1
-        return rc
-    for path, want, desc in outputs:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(want)
-        print(f"đã ghi {os.path.relpath(path)}: {desc}")
-    return 0
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(want)
+                print(f"đã ghi {rel}: {desc}")
+    return rc
 
 
 if __name__ == "__main__":
