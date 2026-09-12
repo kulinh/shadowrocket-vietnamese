@@ -67,7 +67,6 @@ DOMAIN-SUFFIX,qlogo.cn
 DOMAIN-KEYWORD,wechat
 IP-CIDR,31.13.24.0/21,no-resolve
 IP-CIDR,31.13.64.0/18,no-resolve
-IP-CIDR,31.13.96.0/19,no-resolve
 IP-CIDR,45.64.40.0/22,no-resolve
 IP-CIDR,57.141.0.0/19,no-resolve
 IP-CIDR,57.144.0.0/14,no-resolve

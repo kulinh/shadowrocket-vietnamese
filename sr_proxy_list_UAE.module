@@ -128,7 +128,6 @@ DOMAIN-KEYWORD,wechat,PROXY
 # --- Meta / AS32934 (WhatsApp, Messenger, Instagram) — BGP 09/2026 ---
 IP-CIDR,31.13.24.0/21,PROXY,no-resolve
 IP-CIDR,31.13.64.0/18,PROXY,no-resolve
-IP-CIDR,31.13.96.0/19,PROXY,no-resolve
 IP-CIDR,45.64.40.0/22,PROXY,no-resolve
 IP-CIDR,57.141.0.0/19,PROXY,no-resolve
 IP-CIDR,57.144.0.0/14,PROXY,no-resolve
