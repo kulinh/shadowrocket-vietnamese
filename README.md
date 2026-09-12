@@ -30,7 +30,7 @@ Repo dùng dạng **module rule** thay vì file config đầy đủ — gọn g�
 
 | Module | Mục đích | Loại |
 |--------|----------|------|
-| [`sr_proxy_list_CN.module`](sr_proxy_list_CN.module) | **Vượt GFW ở Trung Quốc.** Bao phủ toàn diện Google/Alphabet, Meta, Telegram, Viber, TikTok, X, AI, Dev, Media + IP-CIDR cho dịch vụ hay bị nhiễm DNS | PROXY (blacklist) |
+| [`sr_proxy_list_CN.module`](sr_proxy_list_CN.module) | **Vượt GFW ở Trung Quốc.** Bao phủ toàn diện Google/Alphabet, Meta, Telegram, Viber, TikTok, X, LINE/Kakao/Naver, AI, Dev, Media/Streaming, báo chí quốc tế + DNS công cộng + IP-CIDR đối chiếu BGP (09/2026) cho dịch vụ hay bị nhiễm DNS | PROXY (blacklist) |
 | [`sr_proxy_list_UAE.module`](sr_proxy_list_UAE.module) | **Vượt firewall TDRA ở UAE.** Mở VoIP, nội dung bị chặn & dịch vụ thiết yếu | PROXY (blacklist) |
 | [`zalo_zalopay.module`](zalo_zalopay.module) | Route **toàn bộ** traffic Zalo/ZaloPay qua proxy: đầy đủ domain (chat/API/media/thanh toán) **+ toàn bộ dải IP VNG (AS38244)** đã gộp tối thiểu | PROXY |
 | [`sr_direct_list.module`](sr_direct_list.module) | ~115.000 domain nội địa TQ → đi thẳng (dùng cho **whitelist mode**) | DIRECT |
@@ -125,6 +125,48 @@ shadowrocket-vietnamese/
 - [`01.shadowrocket_configure.md`](docs/01.shadowrocket_configure.md) — giới thiệu chi tiết file cấu hình Shadowrocket.
 - [`02.shadowrocket_update_modules.md`](docs/02.shadowrocket_update_modules.md) — cách cập nhật module thủ công/tự động.
 - [`03.shadowsocks_tiny.conf`](docs/03.shadowsocks_tiny.conf) — file config mẫu tối giản (~20 dòng) để bắt đầu.
+
+### 🔗 Dùng với cf-vpn (config `RWL8899.conf` sinh từ panel)
+
+Nếu bạn dùng fleet **cf-vpn** thì panel sinh sẵn một config Shadowrocket
+(`…/sub/<token>?format=shadowrocket`, tên profile `RWL8899`) gồm 3 group:
+
+| Group | Loại | Nội dung |
+|---|---|---|
+| `AUTO` | url-test | 5 đường ổn định nhất từ Trung Quốc, tự chọn nhanh nhất (test `cp.cloudflare.com/generate_204`, 600 s, tolerance 500 ms) |
+| `HY2-BACKUP` | select | toàn bộ đường Hysteria2 (UDP) — dùng tay khi TCP 443 bị bóp |
+| `PROXY` | select | `AUTO`, `HY2-BACKUP` rồi từng node lẻ (kể cả `XHTTP-Direct` không qua Cloudflare) |
+
+Mọi rule trong `sr_proxy_list_CN.module` trỏ tới policy **`PROXY`**, tức là
+group `PROXY` của config (mặc định chọn `AUTO`). Cách ghép, đúng thứ tự:
+
+1. **Subscription**: thêm link base64 của panel (để có node).
+2. **Config**: *Cấu hình → Tệp từ xa*, dán link `?format=shadowrocket`. Phần
+   `[Rule]` của config kết thúc bằng **`FINAL,DIRECT`** (blacklist mode) và có
+   sẵn 2 rule đưa chính panel + trang đăng nhập Cloudflare Access qua proxy.
+3. **Module**: thêm `sr_reject_list` (trên), `sr_proxy_list_CN`, `zalo_zalopay`
+   như hướng dẫn ở trên.
+4. Trên màn hình chính chọn group **`PROXY`** (hoặc `AUTO`), *Cài đặt → Định
+   tuyến toàn cục* = **Cấu hình**. Ở Trung Quốc: chỉ những gì module liệt kê mới
+   qua VPN, còn lại đi thẳng.
+5. **Ở nhà (Việt Nam)** muốn mọi thứ qua VPN: dùng link
+   `?format=shadowrocket&final=proxy` (config kết thúc bằng `FINAL,PROXY`),
+   hoặc đơn giản đổi *Định tuyến toàn cục* sang **Proxy**.
+
+Không nên đưa node cf-vpn vào rule của module: địa chỉ máy chủ proxy được
+Shadowrocket tự loại khỏi rule, và module này là danh sách chung cho mọi người.
+
+### 🔁 Giữ ruleset v2rayNG đồng bộ với module
+
+`docs/v2rayng_rulesets_CN.json` được **sinh tự động** từ
+`sr_proxy_list_CN.module` bằng `docs/module2v2rayng.py` (DOMAIN-SUFFIX →
+`domain:`, DOMAIN → `full:`, DOMAIN-KEYWORD → `keyword:`, IP-CIDR → `ip`).
+Sau khi sửa module, chạy:
+
+```bash
+python3 docs/module2v2rayng.py          # ghi lại JSON
+python3 docs/module2v2rayng.py --check  # chỉ kiểm tra lệch (dùng trước khi commit)
+```
 
 ### 🤖 Dùng cho v2rayNG (Android)
 File `.module` **không** dùng trực tiếp trên v2rayNG (khác nhân/định dạng). Em đã chuyển sẵn rule proxy sang định dạng routing Xray — dán khối `"routing"` vào `config.json` của v2rayNG (cần đủ outbound tag `proxy`/`direct`/`block`):

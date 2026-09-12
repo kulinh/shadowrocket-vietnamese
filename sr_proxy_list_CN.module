@@ -1,5 +1,5 @@
 #!name=GFW Optimized Proxy List (CN) 2026
-#!desc=Danh sách PROXY tối ưu & toàn diện để vượt GFW khi ở Trung Quốc. Bao phủ đầy đủ: Google/Alphabet (Search/Gmail/Drive/Docs/Meet/Maps/Photos/YouTube/Play/Android/Firebase/GCP/Gemini), Meta (Facebook/Instagram/Threads/Messenger/WhatsApp/Oculus), Telegram, Viber, TikTok, X/Twitter + AI + Dev + Media + CDN. Kèm IP-CIDR cho dịch vụ hay bị nhiễm DNS.
+#!desc=Danh sách PROXY tối ưu & toàn diện để vượt GFW khi ở Trung Quốc. Bao phủ đầy đủ: Google/Alphabet (Search/Gmail/Drive/Docs/Meet/Maps/Photos/YouTube/Play/Android/Firebase/GCP/Gemini), Meta (Facebook/Instagram/Threads/Messenger/WhatsApp/Oculus), Telegram, Viber, TikTok, X/Twitter, LINE/KakaoTalk/Naver + AI + Dev + Media/Streaming + Báo chí + CDN. Kèm IP-CIDR (đối chiếu BGP 09/2026) cho dịch vụ hay bị nhiễm DNS. Bản 2026-09: +DNS công cộng, +Cloudflare Pages/Workers, +Disney+/Max/Prime, +báo quốc tế & VOA/RFA.
 #!homepage=https://github.com/kulinh/shadowrocket-vietnamese
 
 # ============================================================================
@@ -13,6 +13,13 @@
 #        Cài đặt > Proxy > đổi loại proxy từ HTTP sang none (chế độ TUN).
 #  Lưu ý: quy tắc trong module ƯU TIÊN hơn config; module ở trên ưu tiên hơn
 #  module ở dưới. Muốn ghi đè, tạo module nhỏ riêng và đặt lên trên cùng.
+#  4) Dùng chung với config sinh từ panel cf-vpn (RWL8899.conf, có group AUTO /
+#     HY2-BACKUP / PROXY): mọi rule dưới đây trỏ tới policy PROXY, tức là group
+#     PROXY của config (mặc định = AUTO url-test). Trên màn hình chính chọn
+#     group PROXY (hoặc AUTO). Xem README mục "Dùng với cf-vpn".
+#  Nguồn đối chiếu (09/2026): gfwlist, gstatic.com/ipranges/goog.json,
+#  RIPEstat announced-prefixes AS32934 (Meta), AS62014/62041/59930/44907/211157
+#  (Telegram). Xem README để biết cách sinh lại ruleset v2rayNG từ file này.
 # ============================================================================
 
 [Rule]
@@ -89,6 +96,15 @@ IP-CIDR,216.58.192.0/19,PROXY,no-resolve
 IP-CIDR,216.239.32.0/19,PROXY,no-resolve
 IP-CIDR,35.191.0.0/16,PROXY,no-resolve
 IP-CIDR,130.211.0.0/22,PROXY,no-resolve
+IP-CIDR,64.233.160.0/19,PROXY,no-resolve
+IP-CIDR,66.102.0.0/20,PROXY,no-resolve
+IP-CIDR,72.14.192.0/18,PROXY,no-resolve
+IP-CIDR,173.194.0.0/16,PROXY,no-resolve
+IP-CIDR,209.85.128.0/17,PROXY,no-resolve
+IP-CIDR6,2001:4860::/32,PROXY,no-resolve
+IP-CIDR6,2404:6800::/32,PROXY,no-resolve
+IP-CIDR6,2607:f8b0::/32,PROXY,no-resolve
+IP-CIDR6,2a00:1450::/32,PROXY,no-resolve
 
 # ----------------------------------------------------------------------------
 # META (Facebook / Instagram / Threads / Messenger / WhatsApp / Oculus)
@@ -133,7 +149,16 @@ IP-CIDR,173.252.64.0/18,PROXY,no-resolve
 IP-CIDR,179.60.192.0/22,PROXY,no-resolve
 IP-CIDR,185.60.216.0/22,PROXY,no-resolve
 IP-CIDR,204.15.20.0/22,PROXY,no-resolve
+IP-CIDR,31.13.96.0/19,PROXY,no-resolve
+IP-CIDR,57.141.0.0/19,PROXY,no-resolve
+IP-CIDR,57.144.0.0/14,PROXY,no-resolve
+IP-CIDR,103.4.96.0/22,PROXY,no-resolve
+IP-CIDR,163.70.128.0/17,PROXY,no-resolve
+IP-CIDR,163.77.132.0/23,PROXY,no-resolve
+IP-CIDR,163.77.136.0/23,PROXY,no-resolve
+IP-CIDR,185.89.216.0/22,PROXY,no-resolve
 IP-CIDR6,2a03:2880::/32,PROXY,no-resolve
+IP-CIDR6,2620:0:1c00::/40,PROXY,no-resolve
 
 # ----------------------------------------------------------------------------
 # TELEGRAM
@@ -158,11 +183,13 @@ IP-CIDR,91.108.20.0/22,PROXY,no-resolve
 IP-CIDR,91.108.56.0/22,PROXY,no-resolve
 IP-CIDR,95.161.64.0/20,PROXY,no-resolve
 IP-CIDR,149.154.160.0/20,PROXY,no-resolve
-IP-CIDR,149.154.164.0/22,PROXY,no-resolve
+IP-CIDR,91.105.192.0/23,PROXY,no-resolve
+IP-CIDR,185.76.151.0/24,PROXY,no-resolve
 IP-CIDR6,2001:67c:4e8::/48,PROXY,no-resolve
 IP-CIDR6,2001:b28:f23c::/48,PROXY,no-resolve
 IP-CIDR6,2001:b28:f23d::/48,PROXY,no-resolve
 IP-CIDR6,2001:b28:f23f::/48,PROXY,no-resolve
+IP-CIDR6,2a0a:f280::/32,PROXY,no-resolve
 
 # ----------------------------------------------------------------------------
 # VIBER
@@ -201,7 +228,7 @@ DOMAIN-SUFFIX,twimg.com,PROXY
 DOMAIN-KEYWORD,twitter,PROXY
 
 # ----------------------------------------------------------------------------
-# NHẮN TIN KHÁC (LINE / Signal)
+# NHẮN TIN KHÁC (LINE / Signal / KakaoTalk / Naver)
 # ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,line.me,PROXY
 DOMAIN-SUFFIX,line-scdn.net,PROXY
@@ -209,6 +236,10 @@ DOMAIN-SUFFIX,line-apps.com,PROXY
 DOMAIN-SUFFIX,naver.jp,PROXY
 DOMAIN-SUFFIX,signal.org,PROXY
 DOMAIN-SUFFIX,signal.art,PROXY
+DOMAIN-SUFFIX,kakao.com,PROXY
+DOMAIN-SUFFIX,kakaocdn.net,PROXY
+DOMAIN-SUFFIX,naver.com,PROXY
+DOMAIN-SUFFIX,pstatic.net,PROXY
 
 # ----------------------------------------------------------------------------
 # CHAT / HỌP TRỰC TUYẾN
@@ -237,6 +268,9 @@ DOMAIN-SUFFIX,x.ai,PROXY
 DOMAIN-SUFFIX,grok.com,PROXY
 DOMAIN-SUFFIX,perplexity.ai,PROXY
 DOMAIN-SUFFIX,huggingface.co,PROXY
+DOMAIN-SUFFIX,poe.com,PROXY
+DOMAIN-SUFFIX,character.ai,PROXY
+DOMAIN-SUFFIX,mistral.ai,PROXY
 
 # ----------------------------------------------------------------------------
 # DEV (GitHub...)
@@ -249,7 +283,16 @@ DOMAIN-SUFFIX,ghcr.io,PROXY
 DOMAIN-SUFFIX,gitlab.com,PROXY
 DOMAIN-SUFFIX,sourceforge.net,PROXY
 DOMAIN-SUFFIX,docker.com,PROXY
+DOMAIN-SUFFIX,docker.io,PROXY
 DOMAIN-SUFFIX,npmjs.com,PROXY
+DOMAIN-SUFFIX,golang.org,PROXY
+DOMAIN-SUFFIX,go.dev,PROXY
+DOMAIN-SUFFIX,vercel.app,PROXY
+DOMAIN-SUFFIX,netlify.app,PROXY
+DOMAIN-SUFFIX,herokuapp.com,PROXY
+# --- Cloudflare Pages / Workers (hosting cá nhân, hay bị chặn) ---
+DOMAIN-SUFFIX,pages.dev,PROXY
+DOMAIN-SUFFIX,workers.dev,PROXY
 
 # ----------------------------------------------------------------------------
 # MEDIA / MẠNG XÃ HỘI / TRA CỨU (thường bị chặn ở TQ)
@@ -281,6 +324,74 @@ DOMAIN-SUFFIX,bbc.com,PROXY
 DOMAIN-SUFFIX,bbc.co.uk,PROXY
 DOMAIN-SUFFIX,dropbox.com,PROXY
 DOMAIN-SUFFIX,dropboxusercontent.com,PROXY
+# --- Streaming khác ---
+DOMAIN-SUFFIX,disneyplus.com,PROXY
+DOMAIN-SUFFIX,disney-plus.net,PROXY
+DOMAIN-SUFFIX,bamgrid.com,PROXY
+DOMAIN-SUFFIX,dssott.com,PROXY
+DOMAIN-SUFFIX,hbomax.com,PROXY
+DOMAIN-SUFFIX,primevideo.com,PROXY
+DOMAIN-SUFFIX,soundcloud.com,PROXY
+DOMAIN-SUFFIX,sndcdn.com,PROXY
+DOMAIN-SUFFIX,dailymotion.com,PROXY
+DOMAIN-SUFFIX,dmcdn.net,PROXY
+DOMAIN-SUFFIX,fast.com,PROXY
+# --- Blog / mạng xã hội khác ---
+DOMAIN-SUFFIX,tumblr.com,PROXY
+DOMAIN-SUFFIX,flickr.com,PROXY
+DOMAIN-SUFFIX,staticflickr.com,PROXY
+DOMAIN-SUFFIX,wordpress.com,PROXY
+DOMAIN-SUFFIX,wp.com,PROXY
+DOMAIN-SUFFIX,gravatar.com,PROXY
+DOMAIN-SUFFIX,substack.com,PROXY
+DOMAIN-SUFFIX,substackcdn.com,PROXY
+DOMAIN-SUFFIX,patreon.com,PROXY
+DOMAIN-SUFFIX,canva.com,PROXY
+# notion: itdog.cn 12/09/2026 ~60% node đại lục lỗi (chặn không đều) -> cho đi proxy
+DOMAIN-SUFFIX,notion.so,PROXY
+DOMAIN-SUFFIX,notion.site,PROXY
+DOMAIN-SUFFIX,notion.com,PROXY
+# --- Tìm kiếm / lưu trữ / email riêng tư ---
+DOMAIN-SUFFIX,duckduckgo.com,PROXY
+DOMAIN-SUFFIX,duck.com,PROXY
+DOMAIN-SUFFIX,startpage.com,PROXY
+DOMAIN-SUFFIX,yahoo.com,PROXY
+DOMAIN-SUFFIX,yimg.com,PROXY
+DOMAIN-SUFFIX,archive.org,PROXY
+DOMAIN-SUFFIX,archive.ph,PROXY
+DOMAIN-SUFFIX,archive.today,PROXY
+DOMAIN-SUFFIX,mega.nz,PROXY
+DOMAIN-SUFFIX,mega.io,PROXY
+DOMAIN-SUFFIX,box.com,PROXY
+DOMAIN-SUFFIX,proton.me,PROXY
+DOMAIN-SUFFIX,protonmail.com,PROXY
+
+# ----------------------------------------------------------------------------
+# BÁO CHÍ QUỐC TẾ & TIẾNG VIỆT HẢI NGOẠI (bị chặn ở TQ)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,rfa.org,PROXY
+DOMAIN-SUFFIX,voanews.com,PROXY
+DOMAIN-SUFFIX,voatiengviet.com,PROXY
+DOMAIN-SUFFIX,nytimes.com,PROXY
+DOMAIN-SUFFIX,nyt.com,PROXY
+DOMAIN-SUFFIX,wsj.com,PROXY
+DOMAIN-SUFFIX,reuters.com,PROXY
+DOMAIN-SUFFIX,bloomberg.com,PROXY
+DOMAIN-SUFFIX,theguardian.com,PROXY
+DOMAIN-SUFFIX,dw.com,PROXY
+DOMAIN-SUFFIX,aljazeera.com,PROXY
+DOMAIN-SUFFIX,economist.com,PROXY
+DOMAIN-SUFFIX,ft.com,PROXY
+
+# ----------------------------------------------------------------------------
+# DNS CÔNG CỘNG (app nào hardcode 8.8.8.8 / 1.1.1.1 sẽ bị nhiễm nếu đi thẳng)
+# ----------------------------------------------------------------------------
+DOMAIN-SUFFIX,cloudflare-dns.com,PROXY
+DOMAIN,one.one.one.one,PROXY
+IP-CIDR,8.8.8.0/24,PROXY,no-resolve
+IP-CIDR,8.8.4.0/24,PROXY,no-resolve
+IP-CIDR,1.1.1.1/32,PROXY,no-resolve
+IP-CIDR,1.0.0.1/32,PROXY,no-resolve
 
 # ----------------------------------------------------------------------------
 # CDN LỚN (chỉ bắt domain CDN của chính nhà cung cấp, không ảnh hưởng site TQ)
