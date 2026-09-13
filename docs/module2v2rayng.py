@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Sinh docs/v2rayng_rulesets_<VÙNG>.json và sr_proxy_list_<VÙNG>.list từ
-sr_proxy_list_<VÙNG>.module (VÙNG = CN, UAE).
+sr_proxy_list_<VÙNG>.module (VÙNG = CN, UAE, RU).
 
 Giữ các file luôn đồng bộ: mọi DOMAIN-SUFFIX / DOMAIN / DOMAIN-KEYWORD / IP-CIDR
 trong module được chuyển sang cú pháp routing của Xray (domain:/full:/keyword:
@@ -23,7 +23,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
-REGIONS = ("CN", "UAE")
+REGIONS = ("CN", "UAE", "RU")
 
 RULE_TYPES = ("DOMAIN-SUFFIX", "DOMAIN", "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6",
               "USER-AGENT", "URL-REGEX", "GEOIP", "IP-ASN")

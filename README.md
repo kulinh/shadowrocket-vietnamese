@@ -1,6 +1,6 @@
 # 🚀 Shadowrocket Vietnamese Rules
 
-> Bộ quy tắc (module) **Shadowrocket** tối ưu cho người Việt: vượt tường lửa khi ở **Trung Quốc (GFW)** hoặc **UAE**, vẫn giữ các app trong nước (Zalo, ZaloPay, ngân hàng…) chạy thẳng — không vòng qua proxy.
+> Bộ quy tắc (module) **Shadowrocket** tối ưu cho người Việt: vượt tường lửa khi ở **Trung Quốc (GFW)**, **UAE** hoặc **Nga (TSPU)**, vẫn giữ các app trong nước (Zalo, ZaloPay, ngân hàng…) chạy thẳng — không vòng qua proxy.
 
 <p align="center">
   <a href="https://github.com/kulinh/shadowrocket-vietnamese/stargazers">
@@ -19,6 +19,7 @@
 
 - **Ở Trung Quốc:** vượt GFW để vào Google, Meta (Facebook/Instagram/WhatsApp/Threads/Messenger), Telegram, Viber, TikTok, YouTube, X/Twitter, AI (ChatGPT/Claude/Gemini)… mà **không làm chậm** các trang nội địa TQ.
 - **Ở UAE:** mở khóa cuộc gọi VoIP (WhatsApp, FaceTime, Skype, Viber, Telegram) và các dịch vụ bị TDRA chặn.
+- **Ở Nga:** mở OTT bị chặn (WhatsApp, Viber, Signal, Discord, FaceTime), Meta/X/YouTube, báo chí, VPN/AI; hosting & Cloudflare bị bóp 16 KB.
 - **Mọi nơi:** module **Zalo & ZaloPay** gom đủ domain + toàn bộ dải IP của VNG (AS38244), cho phép route trọn traffic Zalo/ZaloPay qua proxy (chat, gọi, gửi ảnh/video/file, thanh toán).
 - **Chặn quảng cáo / tracker** bằng danh sách REJECT khổng lồ.
 
@@ -32,11 +33,12 @@ Repo dùng dạng **module rule** thay vì file config đầy đủ — gọn g�
 |--------|----------|------|
 | [`sr_proxy_list_CN.module`](sr_proxy_list_CN.module) | **Vượt GFW ở Trung Quốc.** Bao phủ toàn diện Google/Alphabet, Meta, Telegram, Viber, TikTok, X, LINE/Kakao/Naver, AI, Dev, Media/Streaming, báo chí quốc tế + DNS công cộng + IP-CIDR đối chiếu BGP (09/2026) cho dịch vụ hay bị nhiễm DNS | PROXY (blacklist) |
 | [`sr_proxy_list_UAE.module`](sr_proxy_list_UAE.module) | **Vượt firewall TDRA ở UAE.** Mở cuộc gọi OTT (WhatsApp, FaceTime, Messenger, Viber, Zalo, Telegram, Signal, Discord, imo, Snapchat, LINE, Kakao, WeChat) + IP-CIDR media relay đối chiếu BGP 09/2026; các nhóm site TDRA chặn hẳn (kiểm chứng du + Etisalat 12/09/2026); DNS công cộng. Không proxy thứ mở bình thường ở UAE (Google/YouTube/Netflix/X/TikTok, Teams/Meet/Zoom, CDN) | PROXY (blacklist) |
+| [`sr_proxy_list_RU.module`](sr_proxy_list_RU.module) | **Vượt TSPU/Roskomnadzor ở Nga.** OTT bị chặn hẳn hoặc bóp (WhatsApp, Viber, Signal, Discord, FaceTime, Snapchat, Telegram) + IP-CIDR media; Meta/X/LinkedIn/Twitch/TikTok; YouTube & streaming đã rút khỏi Nga; báo chí; VPN/privacy; AI/dev; dải Cloudflare & hosting bị bóp; DNS công cộng. Bản 13/09/2026 đối chiếu itdoginfo/allow-domains + ntc.party; dòng "chưa xác minh" = chưa có nguồn độc lập | PROXY (blacklist) |
 | [`zalo_zalopay.module`](zalo_zalopay.module) | Route **toàn bộ** traffic Zalo/ZaloPay qua proxy: đầy đủ domain (chat/API/media/thanh toán) **+ toàn bộ dải IP VNG (AS38244)** đã gộp tối thiểu | PROXY |
 | [`sr_direct_list.module`](sr_direct_list.module) | ~115.000 domain nội địa TQ → đi thẳng (dùng cho **whitelist mode**) | DIRECT |
 | [`sr_reject_list.module`](sr_reject_list.module) | ~175.000 domain quảng cáo / tracker → chặn | REJECT |
 
-> `sr_direct_list` và `sr_reject_list` được **đồng bộ thủ công** từ upstream [GMOogway/shadowrocket-rules](https://github.com/GMOogway/shadowrocket-rules) (repo này không chạy CI tự build). Ba module `CN`, `UAE`, `zalo_zalopay` là **tùy biến riêng** của repo.
+> `sr_direct_list` và `sr_reject_list` được **đồng bộ thủ công** từ upstream [GMOogway/shadowrocket-rules](https://github.com/GMOogway/shadowrocket-rules) (repo này không chạy CI tự build). Bốn module `CN`, `UAE`, `RU`, `zalo_zalopay` là **tùy biến riêng** của repo.
 
 ---
 
@@ -101,6 +103,7 @@ Mỗi module có 2 link: `raw.githubusercontent.com` (nhanh, đôi khi cần pro
 |--------|-----------------------|-------------------|
 | Proxy CN | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_proxy_list_CN.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_proxy_list_CN.module) |
 | Proxy UAE | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_proxy_list_UAE.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_proxy_list_UAE.module) |
+| Proxy RU | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_proxy_list_RU.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_proxy_list_RU.module) |
 | Zalo & ZaloPay | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/zalo_zalopay.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/zalo_zalopay.module) |
 | Direct (TQ) | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_direct_list.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_direct_list.module) |
 | Reject (ads) | [link](https://raw.githubusercontent.com/kulinh/shadowrocket-vietnamese/master/sr_reject_list.module) | [link](https://cdn.jsdelivr.net/gh/kulinh/shadowrocket-vietnamese@master/sr_reject_list.module) |
@@ -115,6 +118,8 @@ shadowrocket-vietnamese/
 ├── sr_proxy_list_CN.list       # bản RULE-SET của module trên (sinh tự động)
 ├── sr_proxy_list_UAE.module    # PROXY - mở OTT VoIP/video khi ở UAE
 ├── sr_proxy_list_UAE.list      # bản RULE-SET của module trên (sinh tự động)
+├── sr_proxy_list_RU.module     # PROXY - vượt TSPU khi ở Nga
+├── sr_proxy_list_RU.list       # bản RULE-SET của module trên (sinh tự động)
 ├── zalo_zalopay.module         # PROXY - full traffic Zalo/ZaloPay + dải IP VNG
 ├── sr_direct_list.module       # DIRECT - domain nội địa TQ (sync upstream)
 ├── sr_reject_list.module       # REJECT - quảng cáo/tracker (sync upstream)
@@ -163,6 +168,8 @@ tự có. Cách ghép, đúng thứ tự:
 **Ở UAE 🇦🇪:** dùng link `?format=shadowrocket&rules=uae` — Worker nhúng
 `sr_proxy_list_UAE.module` thay vì bản CN (mở cuộc gọi OTT + IP media relay,
 site TDRA chặn). Nhớ bỏ module `zalo_zalopay` khi ở UAE.
+
+**Ở Nga 🇷🇺:** dùng config `RWL-RU` (`…/sub/<token>/RWL-RU.conf`, tức `rules=ru`) — Worker nhúng `sr_proxy_list_RU.module`. Trên 4G Nga ưu tiên route VLESS-REALITY (SNI hợp lệ), HY2/QUIC và Cloudflare hay bị bóp.
 
 Tuỳ chọn trên URL config: `&rules=cn` (mặc định) / `&rules=uae` chọn danh sách
 nhúng; `&rules=none` → không nhúng, để tự nạp module bằng tay. Nếu lúc sinh config Worker không tải được GitHub, config sẽ có dòng

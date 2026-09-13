@@ -1,0 +1,502 @@
+#!name=Russia RKN Bypass (TSPU) 2026
+#!desc=Vượt TSPU/Roskomnadzor ở Nga (bản 13/09/2026, đối chiếu tài liệu + đo TCP từ 7 mạng RU, chưa kiểm chứng trên 4G tại chỗ): (1) OTT nhắn tin/gọi bị chặn hẳn (WhatsApp, Viber, Signal, Discord, FaceTime, Snapchat, Threema) hoặc bóp (Telegram ~80% từ 03/2026, gọi Telegram tắt từ 08/2025) kèm IP-CIDR server media; (2) Meta/X/LinkedIn/Twitch/TikTok; (3) YouTube (chặn hẳn từ 02/2026) + streaming đã rút khỏi Nga; (4) báo chí bị chặn; (5) VPN/privacy; (6) AI/dev/cloud; (7) hosting nước ngoài & Cloudflare bị bóp 16 KB (từ 06/2025, còn hiệu lực 07/2026); (8) DNS công cộng. Dòng có "# chưa xác minh" = chưa có nguồn 2026 độc lập.
+#!homepage=https://github.com/kulinh/shadowrocket-vietnamese
+
+# ============================================================================
+#  HƯỚNG DẪN (BLACKLIST MODE — cho khi ở Nga)
+#  1) Cài đặt > Module: thêm module này (đặt sr_reject_list ở trên nếu dùng).
+#  2) Trong config (.conf), phần [Rule] dòng CUỐI CÙNG đặt:  FINAL,DIRECT
+#     => Các domain/IP dưới đây đi PROXY, phần còn lại (Yandex, VK, Sber,
+#     Gosuslugi, Ozon...) đi thẳng. Rất quan trọng: app ngân hàng/dịch vụ Nga
+#     đi qua VPN sẽ bị đánh dấu và có thể kéo theo chặn IP node (Xeovo 08/2026).
+#  3) Nếu mạng di động rơi vào chế độ "white list" (chỉ ~57+ dịch vụ Nga được
+#     mở, các đợt cắt mobile 2025-2026) thì KHÔNG rule nào cứu được: chỉ còn
+#     Wi-Fi cố định hoặc chờ hết đợt cắt.
+#  4) Với panel cf-vpn: config RWL-RU (…/sub/<token>/RWL-RU.conf hoặc
+#     &rules=ru) nhúng sẵn module này, không cần nạp tay.
+#  Lưu ý kỹ thuật (ntc.party / habr 06/2026): TSPU đóng băng kết nối TLS tới
+#  IP hosting nước ngoài sau ~16 KB (25 gói) và khi >3 handshake song song tới
+#  cùng SNI; nên ưu tiên route VLESS-REALITY (SNI hợp lệ, uTLS firefox/random),
+#  bật mux; HY2/QUIC bị chặn hẳn trên Tele2, lọc trên MegaFon/Beeline.
+#  Nguồn đối chiếu (09/2026): itdoginfo/allow-domains (Russia/inside-raw),
+#  express.ms bảng messenger 04/2026, zona.media 04/2026, Cloudflare blog
+#  (cập nhật 07/2026), ntc.party threads 16061/17013/20340/23843, MacRumors
+#  (FaceTime 12/2025), The Record (Speedtest 07/2025, Roblox 12/2025), BGP
+#  AS32934/AS62014.. lấy lại từ sr_proxy_list_UAE (09/2026); IP Cloudflare từ
+#  cloudflare.com/ips-v4 (13/09/2026).
+# ============================================================================
+
+[Rule]
+
+# ============================================================================
+#  NHÓM 1 — OTT NHẮN TIN / GỌI THOẠI & VIDEO
+# ============================================================================
+
+# ---------------------------- WhatsApp (chặn hẳn 11-12/02/2026) ------------
+DOMAIN-SUFFIX,whatsapp.com,PROXY
+DOMAIN-SUFFIX,whatsapp.net,PROXY
+DOMAIN-SUFFIX,whatsapp.biz,PROXY
+DOMAIN-SUFFIX,wa.me,PROXY
+
+# ---------------------------- Facebook / Messenger / Instagram / Threads ---
+#   Meta bị coi là "cực đoan" từ 03/2022; Messenger & Instagram Direct chặn.
+DOMAIN-SUFFIX,facebook.com,PROXY
+DOMAIN-SUFFIX,facebook.net,PROXY
+DOMAIN-SUFFIX,fb.com,PROXY
+DOMAIN-SUFFIX,fbcdn.net,PROXY
+DOMAIN-SUFFIX,fbsbx.com,PROXY
+DOMAIN-SUFFIX,messenger.com,PROXY
+DOMAIN-SUFFIX,m.me,PROXY
+DOMAIN-SUFFIX,instagram.com,PROXY
+DOMAIN-SUFFIX,cdninstagram.com,PROXY
+DOMAIN-SUFFIX,ig.me,PROXY
+DOMAIN-SUFFIX,threads.net,PROXY
+DOMAIN-SUFFIX,threads.com,PROXY
+DOMAIN-SUFFIX,meta.com,PROXY
+DOMAIN-SUFFIX,oculus.com,PROXY
+
+# ---------------------------- FaceTime / iMessage (chặn 12/2025) -----------
+#   Chỉ signaling; App Store/iCloud đi thẳng. Media relay nằm trong 17.0.0.0/8.
+DOMAIN-SUFFIX,facetime.apple.com,PROXY
+DOMAIN-SUFFIX,ess.apple.com,PROXY
+DOMAIN-SUFFIX,ids.apple.com,PROXY
+DOMAIN-SUFFIX,push.apple.com,PROXY
+
+# ---------------------------- Viber (chặn 13/12/2024) ----------------------
+DOMAIN-SUFFIX,viber.com,PROXY
+DOMAIN-SUFFIX,viber.net,PROXY
+DOMAIN-KEYWORD,viber,PROXY
+
+# ---------------------------- Telegram (bóp ~80% từ 03/2026; gọi tắt 08/2025)
+DOMAIN-SUFFIX,telegram.org,PROXY
+DOMAIN-SUFFIX,telegram.me,PROXY
+DOMAIN-SUFFIX,t.me,PROXY
+DOMAIN-SUFFIX,telegra.ph,PROXY
+DOMAIN-SUFFIX,tdesktop.com,PROXY
+DOMAIN-SUFFIX,telesco.pe,PROXY
+DOMAIN-SUFFIX,cdn-telegram.org,PROXY
+DOMAIN-KEYWORD,telegram,PROXY
+
+# ---------------------------- Signal (chặn 08/2024) ------------------------
+DOMAIN-SUFFIX,signal.org,PROXY
+DOMAIN-SUFFIX,signal.art,PROXY
+DOMAIN-SUFFIX,whispersystems.org,PROXY
+
+# ---------------------------- Discord (chặn 08/10/2024) --------------------
+DOMAIN-SUFFIX,discord.com,PROXY
+DOMAIN-SUFFIX,discordapp.com,PROXY
+DOMAIN-SUFFIX,discordapp.net,PROXY
+DOMAIN-SUFFIX,discord.gg,PROXY
+DOMAIN-SUFFIX,discord.media,PROXY
+DOMAIN-SUFFIX,discord.co,PROXY
+DOMAIN-SUFFIX,discord.dev,PROXY
+DOMAIN-SUFFIX,discordsays.com,PROXY
+DOMAIN-SUFFIX,dis.gd,PROXY
+
+# ---------------------------- Snapchat (chặn 10/2025) ----------------------
+DOMAIN-SUFFIX,snapchat.com,PROXY
+DOMAIN-SUFFIX,sc-cdn.net,PROXY
+DOMAIN-SUFFIX,sc-prod.net,PROXY
+DOMAIN-SUFFIX,sc-static.net,PROXY
+
+# ---------------------------- Threema / SimpleX / Element ------------------
+DOMAIN-SUFFIX,threema.ch,PROXY
+DOMAIN-SUFFIX,simplex.chat,PROXY
+DOMAIN-SUFFIX,simplex.im,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,matrix.org,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,element.io,PROXY
+
+# ---------------------------- Zalo (không có nguồn chặn; giữ để gọi ổn định)
+#   Zalo không nằm trong danh sách RKN, nhưng gọi thoại nối VNG bằng IP có thể
+#   dính bóp 16 KB / lọc UDP; bật nếu gọi Zalo rớt.
+# chưa xác minh
+DOMAIN-SUFFIX,zalo.me,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,zaloapp.com,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,zadn.vn,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,zdn.vn,PROXY
+
+# ----------------------------------------------------------------------------
+#  IP-CIDR SERVER MEDIA (RTP/STUN/TURN) — BẮT BUỘC để cuộc gọi không rớt
+# ----------------------------------------------------------------------------
+# --- Meta / AS32934 (WhatsApp, Messenger, Instagram) — BGP 09/2026 ---
+IP-CIDR,31.13.24.0/21,PROXY,no-resolve
+IP-CIDR,31.13.64.0/18,PROXY,no-resolve
+IP-CIDR,45.64.40.0/22,PROXY,no-resolve
+IP-CIDR,57.141.0.0/19,PROXY,no-resolve
+IP-CIDR,57.144.0.0/14,PROXY,no-resolve
+IP-CIDR,66.220.144.0/20,PROXY,no-resolve
+IP-CIDR,69.63.176.0/20,PROXY,no-resolve
+IP-CIDR,69.171.224.0/19,PROXY,no-resolve
+IP-CIDR,74.119.76.0/22,PROXY,no-resolve
+IP-CIDR,102.132.96.0/20,PROXY,no-resolve
+IP-CIDR,103.4.96.0/22,PROXY,no-resolve
+IP-CIDR,129.134.0.0/16,PROXY,no-resolve
+IP-CIDR,157.240.0.0/16,PROXY,no-resolve
+IP-CIDR,163.70.128.0/17,PROXY,no-resolve
+IP-CIDR,163.77.132.0/23,PROXY,no-resolve
+IP-CIDR,163.77.136.0/23,PROXY,no-resolve
+IP-CIDR,173.252.64.0/18,PROXY,no-resolve
+IP-CIDR,179.60.192.0/22,PROXY,no-resolve
+IP-CIDR,185.60.216.0/22,PROXY,no-resolve
+IP-CIDR,185.89.216.0/22,PROXY,no-resolve
+IP-CIDR,204.15.20.0/22,PROXY,no-resolve
+IP-CIDR6,2a03:2880::/32,PROXY,no-resolve
+IP-CIDR6,2620:0:1c00::/40,PROXY,no-resolve
+# --- Apple 17.0.0.0/8 (FaceTime/iMessage relay + APNs). Bỏ nếu App Store chậm ---
+IP-CIDR,17.0.0.0/8,PROXY,no-resolve
+# --- Telegram (RKN bóp theo IP datacenter) — BGP 09/2026 ---
+IP-CIDR,91.105.192.0/23,PROXY,no-resolve
+IP-CIDR,91.108.4.0/22,PROXY,no-resolve
+IP-CIDR,91.108.8.0/22,PROXY,no-resolve
+IP-CIDR,91.108.12.0/22,PROXY,no-resolve
+IP-CIDR,91.108.16.0/22,PROXY,no-resolve
+IP-CIDR,91.108.20.0/22,PROXY,no-resolve
+IP-CIDR,91.108.56.0/22,PROXY,no-resolve
+IP-CIDR,95.161.64.0/20,PROXY,no-resolve
+IP-CIDR,149.154.160.0/20,PROXY,no-resolve
+IP-CIDR,185.76.151.0/24,PROXY,no-resolve
+IP-CIDR6,2001:67c:4e8::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23c::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23d::/48,PROXY,no-resolve
+IP-CIDR6,2001:b28:f23f::/48,PROXY,no-resolve
+IP-CIDR6,2a0a:f280::/32,PROXY,no-resolve
+
+# ============================================================================
+#  NHÓM 2 — MẠNG XÃ HỘI / VIDEO
+# ============================================================================
+
+# ---------------------------- X / Twitter (chặn 03/2022) -------------------
+DOMAIN-SUFFIX,x.com,PROXY
+DOMAIN-SUFFIX,twitter.com,PROXY
+DOMAIN-SUFFIX,twimg.com,PROXY
+DOMAIN-SUFFIX,t.co,PROXY
+DOMAIN-SUFFIX,twttr.com,PROXY
+DOMAIN-SUFFIX,periscope.tv,PROXY
+DOMAIN-SUFFIX,pscp.tv,PROXY
+DOMAIN-SUFFIX,x.ai,PROXY
+DOMAIN-SUFFIX,grok.com,PROXY
+
+# ---------------------------- YouTube (bóp 2024-25, chặn hẳn 12/02/2026) ---
+#   Không đưa cả google.com: Search/Gmail/Maps/Play vẫn mở ở Nga (zona.media).
+DOMAIN-SUFFIX,youtube.com,PROXY
+DOMAIN-SUFFIX,youtu.be,PROXY
+DOMAIN-SUFFIX,yt.be,PROXY
+DOMAIN-SUFFIX,youtube-nocookie.com,PROXY
+DOMAIN-SUFFIX,youtubekids.com,PROXY
+DOMAIN-SUFFIX,googlevideo.com,PROXY
+DOMAIN-SUFFIX,ytimg.com,PROXY
+DOMAIN-SUFFIX,ggpht.com,PROXY
+DOMAIN-SUFFIX,yt3.googleusercontent.com,PROXY
+DOMAIN,youtubei.googleapis.com,PROXY
+DOMAIN,youtubeembeddedplayer.googleapis.com,PROXY
+DOMAIN,jnn-pa.googleapis.com,PROXY
+DOMAIN,proactivebackend-pa.googleapis.com,PROXY
+DOMAIN,suggestqueries.google.com,PROXY
+DOMAIN-SUFFIX,youtube-ui.l.google.com,PROXY
+DOMAIN-SUFFIX,wide-youtube.l.google.com,PROXY
+DOMAIN-SUFFIX,yt-video-upload.l.google.com,PROXY
+DOMAIN-SUFFIX,ytimg.l.google.com,PROXY
+DOMAIN-SUFFIX,returnyoutubedislikeapi.com,PROXY
+
+# ---------------------------- TikTok (hạn chế; dính bóp Cloudflare 06/2025) -
+DOMAIN-SUFFIX,tiktok.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn-eu.com,PROXY
+DOMAIN-SUFFIX,tiktokcdn-us.com,PROXY
+DOMAIN-SUFFIX,tiktokv.com,PROXY
+DOMAIN-SUFFIX,tiktokv.eu,PROXY
+DOMAIN-SUFFIX,tiktokv.us,PROXY
+DOMAIN-SUFFIX,tiktokw.us,PROXY
+DOMAIN-SUFFIX,ttwstatic.com,PROXY
+DOMAIN-SUFFIX,ibytedtos.com,PROXY
+DOMAIN-SUFFIX,byteoversea.com,PROXY
+DOMAIN-SUFFIX,muscdn.com,PROXY
+
+# ---------------------------- LinkedIn (chặn 2016) / Twitch / Patreon ------
+DOMAIN-SUFFIX,linkedin.com,PROXY
+DOMAIN-SUFFIX,licdn.com,PROXY
+DOMAIN-SUFFIX,twitch.tv,PROXY
+DOMAIN-SUFFIX,ttvnw.net,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,jtvnw.net,PROXY
+DOMAIN-SUFFIX,patreon.com,PROXY
+DOMAIN-SUFFIX,patreonusercontent.com,PROXY
+DOMAIN-SUFFIX,medium.com,PROXY
+DOMAIN-SUFFIX,quora.com,PROXY
+DOMAIN-SUFFIX,imgur.com,PROXY
+DOMAIN-SUFFIX,pixiv.net,PROXY
+DOMAIN-SUFFIX,deviantart.com,PROXY
+DOMAIN-SUFFIX,soundcloud.com,PROXY
+DOMAIN-SUFFIX,sndcdn.com,PROXY
+DOMAIN-SUFFIX,last.fm,PROXY
+
+# ---------------------------- Streaming đã rút khỏi Nga / bị chặn -----------
+DOMAIN-SUFFIX,netflix.com,PROXY
+DOMAIN-SUFFIX,netflix.net,PROXY
+DOMAIN-SUFFIX,nflxvideo.net,PROXY
+DOMAIN-SUFFIX,nflximg.net,PROXY
+DOMAIN-SUFFIX,nflxext.com,PROXY
+DOMAIN-SUFFIX,nflxso.net,PROXY
+DOMAIN-SUFFIX,disneyplus.com,PROXY
+DOMAIN-SUFFIX,hbomax.com,PROXY
+DOMAIN-SUFFIX,max.com,PROXY
+DOMAIN-SUFFIX,primevideo.com,PROXY
+DOMAIN-SUFFIX,crunchyroll.com,PROXY
+DOMAIN-SUFFIX,spotify.com,PROXY
+DOMAIN-SUFFIX,deezer.com,PROXY
+DOMAIN-SUFFIX,tidal.com,PROXY
+DOMAIN-SUFFIX,qobuz.com,PROXY
+
+# ---------------------------- Game --------------------------------------------
+DOMAIN-SUFFIX,roblox.com,PROXY
+DOMAIN-SUFFIX,rbxcdn.com,PROXY
+DOMAIN-SUFFIX,supercell.com,PROXY
+DOMAIN-SUFFIX,clashofclans.com,PROXY
+DOMAIN-SUFFIX,clashroyaleapp.com,PROXY
+DOMAIN-SUFFIX,brawlstarsgame.com,PROXY
+DOMAIN-SUFFIX,geforcenow.com,PROXY
+DOMAIN-SUFFIX,itch.io,PROXY
+DOMAIN-SUFFIX,modrinth.com,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,steamstat.info,PROXY
+
+# ============================================================================
+#  NHÓM 3 — BÁO CHÍ / TỔ CHỨC BỊ RKN CHẶN
+# ============================================================================
+DOMAIN-SUFFIX,bbc.com,PROXY
+DOMAIN-SUFFIX,bbc.co.uk,PROXY
+DOMAIN-SUFFIX,bbci.co.uk,PROXY
+DOMAIN-SUFFIX,dw.com,PROXY
+DOMAIN-SUFFIX,meduza.io,PROXY
+DOMAIN-SUFFIX,novayagazeta.eu,PROXY
+DOMAIN-SUFFIX,novayagazeta.ru,PROXY
+DOMAIN-SUFFIX,novaya.no,PROXY
+DOMAIN-SUFFIX,zona.media,PROXY
+DOMAIN-SUFFIX,mediazona.ca,PROXY
+DOMAIN-SUFFIX,theins.ru,PROXY
+DOMAIN-SUFFIX,theins.press,PROXY
+DOMAIN-SUFFIX,istories.media,PROXY
+DOMAIN-SUFFIX,important-stories.com,PROXY
+DOMAIN-SUFFIX,svoboda.org,PROXY
+DOMAIN-SUFFIX,rferl.org,PROXY
+DOMAIN-SUFFIX,currenttime.tv,PROXY
+DOMAIN-SUFFIX,voanews.com,PROXY
+DOMAIN-SUFFIX,golosameriki.com,PROXY
+DOMAIN-SUFFIX,euronews.com,PROXY
+DOMAIN-SUFFIX,themoscowtimes.com,PROXY
+DOMAIN-SUFFIX,moscowtimes.ru,PROXY
+DOMAIN-SUFFIX,tvrain.tv,PROXY
+DOMAIN-SUFFIX,tvrain.ru,PROXY
+DOMAIN-SUFFIX,bellingcat.com,PROXY
+DOMAIN-SUFFIX,thebell.io,PROXY
+DOMAIN-SUFFIX,holod.media,PROXY
+DOMAIN-SUFFIX,ovd.info,PROXY
+DOMAIN-SUFFIX,ovdinfo.org,PROXY
+DOMAIN-SUFFIX,navalny.com,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,fbk.info,PROXY
+DOMAIN-SUFFIX,carnegieendowment.org,PROXY
+DOMAIN-SUFFIX,politico.eu,PROXY
+DOMAIN-SUFFIX,spiegel.de,PROXY
+DOMAIN-SUFFIX,welt.de,PROXY
+DOMAIN-SUFFIX,telegraph.co.uk,PROXY
+DOMAIN-SUFFIX,foxnews.com,PROXY
+DOMAIN-SUFFIX,usatoday.com,PROXY
+DOMAIN-SUFFIX,vice.com,PROXY
+DOMAIN-SUFFIX,swissinfo.ch,PROXY
+DOMAIN-SUFFIX,yle.fi,PROXY
+DOMAIN-SUFFIX,delfi.lt,PROXY
+DOMAIN-SUFFIX,delfi.lv,PROXY
+DOMAIN-SUFFIX,postimees.ee,PROXY
+DOMAIN-SUFFIX,pravda.com.ua,PROXY
+DOMAIN-SUFFIX,ukr.net,PROXY
+DOMAIN-SUFFIX,unian.ua,PROXY
+DOMAIN-SUFFIX,liga.net,PROXY
+DOMAIN-SUFFIX,ua,PROXY
+DOMAIN-SUFFIX,roskomsvoboda.org,PROXY
+DOMAIN-SUFFIX,rublacklist.net,PROXY
+DOMAIN-SUFFIX,ntc.party,PROXY
+DOMAIN-SUFFIX,habr.com,PROXY
+DOMAIN-SUFFIX,4pda.to,PROXY
+DOMAIN-SUFFIX,4pda.ws,PROXY
+DOMAIN-SUFFIX,archive.ph,PROXY
+DOMAIN-SUFFIX,annas-archive.org,PROXY
+DOMAIN-SUFFIX,flibusta.is,PROXY
+DOMAIN-SUFFIX,sci-hub.se,PROXY
+DOMAIN-SUFFIX,rutracker.org,PROXY
+DOMAIN-SUFFIX,rutracker.net,PROXY
+DOMAIN-SUFFIX,rutor.info,PROXY
+DOMAIN-SUFFIX,nnmclub.to,PROXY
+DOMAIN-SUFFIX,thepiratebay.org,PROXY
+DOMAIN-SUFFIX,1337x.to,PROXY
+
+# ============================================================================
+#  NHÓM 4 — VPN / PRIVACY / EMAIL MÃ HOÁ (469 dịch vụ VPN bị RKN chặn 03/2026)
+# ============================================================================
+DOMAIN-SUFFIX,proton.me,PROXY
+DOMAIN-SUFFIX,protonvpn.com,PROXY
+DOMAIN-SUFFIX,protonmail.com,PROXY
+DOMAIN-SUFFIX,nordvpn.com,PROXY
+DOMAIN-SUFFIX,nordcdn.com,PROXY
+DOMAIN-SUFFIX,nordaccount.com,PROXY
+DOMAIN-SUFFIX,surfshark.com,PROXY
+DOMAIN-SUFFIX,expressvpn.com,PROXY
+DOMAIN-SUFFIX,mullvad.net,PROXY
+DOMAIN-SUFFIX,cyberghostvpn.com,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,windscribe.com,PROXY
+DOMAIN-SUFFIX,adguard-vpn.com,PROXY
+DOMAIN-SUFFIX,adguard.com,PROXY
+DOMAIN-SUFFIX,amnezia.org,PROXY
+DOMAIN-SUFFIX,vpngen.org,PROXY
+DOMAIN-SUFFIX,psiphon.ca,PROXY
+DOMAIN-SUFFIX,lantern.io,PROXY
+DOMAIN-SUFFIX,getoutline.org,PROXY
+DOMAIN-SUFFIX,getoutline.com,PROXY
+DOMAIN-SUFFIX,torproject.org,PROXY
+DOMAIN-SUFFIX,vpngate.net,PROXY
+DOMAIN-SUFFIX,redshieldvpn.com,PROXY
+DOMAIN-SUFFIX,dpidetector.org,PROXY
+DOMAIN-SUFFIX,censortracker.org,PROXY
+# chưa xác minh (WARP: RKN cấm 12/2021)
+DOMAIN-SUFFIX,cloudflareclient.com,PROXY
+DOMAIN-SUFFIX,cloudflare-dns.com,PROXY
+DOMAIN-SUFFIX,tuta.com,PROXY
+DOMAIN-SUFFIX,tuta.io,PROXY
+DOMAIN-SUFFIX,tutanota.com,PROXY
+DOMAIN-SUFFIX,mailfence.com,PROXY
+DOMAIN-SUFFIX,startmail.com,PROXY
+DOMAIN-SUFFIX,skiff.com,PROXY
+DOMAIN-SUFFIX,riseup.net,PROXY
+DOMAIN-SUFFIX,cock.li,PROXY
+DOMAIN-SUFFIX,startpage.com,PROXY
+DOMAIN-SUFFIX,qwant.com,PROXY
+
+# ============================================================================
+#  NHÓM 5 — AI / DEV / SaaS (chặn theo yêu cầu RKN hoặc tự chặn IP Nga)
+# ============================================================================
+DOMAIN-SUFFIX,openai.com,PROXY
+DOMAIN-SUFFIX,chatgpt.com,PROXY
+DOMAIN-SUFFIX,oaistatic.com,PROXY
+DOMAIN-SUFFIX,oaiusercontent.com,PROXY
+DOMAIN-SUFFIX,sora.com,PROXY
+DOMAIN-SUFFIX,anthropic.com,PROXY
+DOMAIN-SUFFIX,claude.ai,PROXY
+DOMAIN-SUFFIX,claude.com,PROXY
+DOMAIN-SUFFIX,groq.com,PROXY
+DOMAIN-SUFFIX,openrouter.ai,PROXY
+DOMAIN-SUFFIX,elevenlabs.io,PROXY
+DOMAIN-SUFFIX,deepl.com,PROXY
+DOMAIN-SUFFIX,cursor.sh,PROXY
+DOMAIN-SUFFIX,cursor-cdn.com,PROXY
+DOMAIN-SUFFIX,cursorapi.com,PROXY
+DOMAIN-SUFFIX,windsurf.com,PROXY
+DOMAIN-SUFFIX,codeium.com,PROXY
+DOMAIN-SUFFIX,jetbrains.com,PROXY
+# chưa xác minh (chỉ api.jetbrains.ai có trong list)
+DOMAIN-SUFFIX,jetbrains.ai,PROXY
+DOMAIN,copilot.microsoft.com,PROXY
+DOMAIN-SUFFIX,notion.so,PROXY
+DOMAIN-SUFFIX,notion.com,PROXY
+DOMAIN-SUFFIX,notion.site,PROXY
+DOMAIN-SUFFIX,notion-static.com,PROXY
+DOMAIN-SUFFIX,linear.app,PROXY
+DOMAIN-SUFFIX,atlassian.com,PROXY
+DOMAIN-SUFFIX,canva.com,PROXY
+DOMAIN-SUFFIX,adobe.com,PROXY
+DOMAIN-SUFFIX,adobe.io,PROXY
+DOMAIN-SUFFIX,autodesk.com,PROXY
+DOMAIN-SUFFIX,intel.com,PROXY
+DOMAIN-SUFFIX,cisco.com,PROXY
+DOMAIN-SUFFIX,vmware.com,PROXY
+DOMAIN-SUFFIX,ibm.com,PROXY
+DOMAIN-SUFFIX,oracle.com,PROXY
+DOMAIN-SUFFIX,oraclecloud.com,PROXY
+DOMAIN-SUFFIX,hetzner.com,PROXY
+DOMAIN-SUFFIX,digitalocean.com,PROXY
+DOMAIN-SUFFIX,contabo.com,PROXY
+DOMAIN-SUFFIX,hostinger.com,PROXY
+DOMAIN-SUFFIX,godaddy.com,PROXY
+DOMAIN-SUFFIX,ngrok.com,PROXY
+DOMAIN-SUFFIX,sentry.io,PROXY
+DOMAIN-SUFFIX,grafana.com,PROXY
+DOMAIN-SUFFIX,mongodb.com,PROXY
+DOMAIN-SUFFIX,hashicorp.com,PROXY
+DOMAIN-SUFFIX,terraform.io,PROXY
+DOMAIN-SUFFIX,pkgs.tailscale.com,PROXY
+DOMAIN-SUFFIX,teamviewer.com,PROXY
+DOMAIN-SUFFIX,coursera.org,PROXY
+DOMAIN-SUFFIX,upwork.com,PROXY
+DOMAIN-SUFFIX,wise.com,PROXY
+DOMAIN-SUFFIX,transferwise.com,PROXY
+DOMAIN-SUFFIX,squareup.com,PROXY
+DOMAIN-SUFFIX,etsy.com,PROXY
+DOMAIN-SUFFIX,ikea.com,PROXY
+DOMAIN-SUFFIX,nike.com,PROXY
+DOMAIN-SUFFIX,adidas.com,PROXY
+DOMAIN-SUFFIX,mega.nz,PROXY
+DOMAIN-SUFFIX,wetransfer.com,PROXY
+DOMAIN-SUFFIX,gofile.io,PROXY
+DOMAIN-SUFFIX,speedtest.net,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,ooklaserver.net,PROXY
+DOMAIN-SUFFIX,fast.com,PROXY
+
+# ============================================================================
+#  NHÓM 6 — CLOUDFLARE & HOSTING NƯỚC NGOÀI (bóp 16 KB: Rostelecom, MegaFon,
+#  Vimpelcom, MTS, MGTS từ 09/06/2025; Cloudflare xác nhận còn hiệu lực 07/2026;
+#  ntc.party 04/2026: OVH/G-Core/CloudFront timeout, "8.*" CF được whitelist).
+#  Khối IP-CIDR này đẩy MỌI site sau Cloudflare qua proxy (nặng, nhưng đúng
+#  triệu chứng "trang load một nửa rồi đứng"). Node JPY-01 HTTPUpgrade/Naive
+#  không bị ảnh hưởng vì traffic của chính proxy không đi qua rule.
+#  Nguồn: cloudflare.com/ips-v4 (13/09/2026).
+# ============================================================================
+DOMAIN-SUFFIX,pages.dev,PROXY
+# chưa xác minh
+DOMAIN-SUFFIX,workers.dev,PROXY
+# chưa xác minh (ntc.party 04/2026: subdomain bị chặn)
+DOMAIN-SUFFIX,cloudfront.net,PROXY
+IP-CIDR,173.245.48.0/20,PROXY,no-resolve
+IP-CIDR,103.21.244.0/22,PROXY,no-resolve
+IP-CIDR,103.22.200.0/22,PROXY,no-resolve
+IP-CIDR,103.31.4.0/22,PROXY,no-resolve
+IP-CIDR,141.101.64.0/18,PROXY,no-resolve
+IP-CIDR,108.162.192.0/18,PROXY,no-resolve
+IP-CIDR,190.93.240.0/20,PROXY,no-resolve
+IP-CIDR,188.114.96.0/20,PROXY,no-resolve
+IP-CIDR,197.234.240.0/22,PROXY,no-resolve
+IP-CIDR,198.41.128.0/17,PROXY,no-resolve
+IP-CIDR,162.158.0.0/15,PROXY,no-resolve
+IP-CIDR,104.16.0.0/13,PROXY,no-resolve
+IP-CIDR,104.24.0.0/14,PROXY,no-resolve
+IP-CIDR,172.64.0.0/13,PROXY,no-resolve
+IP-CIDR,131.0.72.0/22,PROXY,no-resolve
+# --- Hetzner / DigitalOcean / OVH: bị bóp 16 KB theo ASN nhưng dải quá rộng
+#     để liệt kê; nếu cần thì dùng runetfreedom/russia-blocked-geoip (srs). ---
+
+# ============================================================================
+#  NHÓM 7 — DNS CÔNG CỘNG (zona.media 04/2026: 1.1.1.1 & 8.8.8.8 chưa bị chặn,
+#  nhưng ISP Nga trả DNS giả cho domain bị chặn -> ép DoH đi proxy)
+# ============================================================================
+DOMAIN,one.one.one.one,PROXY
+DOMAIN,dns.google,PROXY
+IP-CIDR,8.8.8.0/24,PROXY,no-resolve
+IP-CIDR,8.8.4.0/24,PROXY,no-resolve
+IP-CIDR,1.1.1.1/32,PROXY,no-resolve
+IP-CIDR,1.0.0.1/32,PROXY,no-resolve
+# chưa xác minh
+IP-CIDR,9.9.9.9/32,PROXY,no-resolve
+
+# ============================================================================
+#  KHÔNG ĐƯA VÀO (mở bình thường ở Nga 09/2026, cho đi proxy chỉ làm chậm):
+#  google.com (Search/Gmail/Maps/Play), apple.com/icloud.com, microsoft.com,
+#  teams.microsoft.com, zoom.us, meet.google.com, wikipedia.org, reddit.com,
+#  github.com, steam (steampowered.com), wechat, kakao, line, imo, viber web
+#  (app chặn nhưng web mở? # chưa xác minh), yandex/vk/mail.ru/sber/ozon.
+#  Muốn mọi thứ qua VPN: link config &final=proxy hoặc Định tuyến toàn cục.
+# ============================================================================
