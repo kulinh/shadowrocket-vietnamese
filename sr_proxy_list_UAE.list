@@ -58,8 +58,6 @@ DOMAIN-SUFFIX,line-apps.com
 DOMAIN-SUFFIX,kakao.com
 DOMAIN-SUFFIX,kakaocdn.net
 DOMAIN-SUFFIX,wechat.com
-DOMAIN-SUFFIX,weixin.qq.com
-DOMAIN-SUFFIX,wx.qq.com
 DOMAIN-SUFFIX,wechatapp.com
 DOMAIN-SUFFIX,qq.com
 DOMAIN-SUFFIX,qpic.cn
@@ -143,7 +141,6 @@ DOMAIN-SUFFIX,okcupid.com
 DOMAIN-SUFFIX,grindr.com
 DOMAIN-SUFFIX,nordvpn.com
 DOMAIN-SUFFIX,protonvpn.com
-DOMAIN-SUFFIX,proton.me
 DOMAIN-SUFFIX,expressvpn.com
 DOMAIN-SUFFIX,surfshark.com
 DOMAIN-SUFFIX,windscribe.com

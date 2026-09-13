@@ -1,5 +1,5 @@
 #!name=GFW Optimized Proxy List (CN) 2026
-#!desc=Danh sách PROXY tối ưu & toàn diện để vượt GFW khi ở Trung Quốc. Bao phủ đầy đủ: Google/Alphabet (Search/Gmail/Drive/Docs/Meet/Maps/Photos/YouTube/Play/Android/Firebase/GCP/Gemini), Meta (Facebook/Instagram/Threads/Messenger/WhatsApp/Oculus), Telegram, Viber, TikTok, X/Twitter, LINE/KakaoTalk/Naver + AI + Dev + Media/Streaming + Báo chí + CDN. Kèm IP-CIDR (đối chiếu BGP 09/2026) cho dịch vụ hay bị nhiễm DNS. Bản 2026-09: +DNS công cộng, +Cloudflare Pages/Workers, +Disney+/Max/Prime, +báo quốc tế & VOA/RFA.
+#!desc=Danh sách PROXY tối ưu & toàn diện để vượt GFW khi ở Trung Quốc. Bao phủ đầy đủ: Google/Alphabet (Search/Gmail/Drive/Docs/Meet/Maps/Photos/YouTube/Play/Android/Firebase/GCP/Gemini), Meta (Facebook/Instagram/Threads/Messenger/WhatsApp/Oculus), Telegram, Viber, TikTok, X/Twitter, LINE/KakaoTalk/Naver + AI + Dev + Media/Streaming + Báo chí + CDN. Kèm IP-CIDR (đối chiếu BGP 09/2026) cho dịch vụ hay bị nhiễm DNS. Bản 2026-09: +DNS công cộng, +Cloudflare Pages/Workers, +Disney+/Max/Prime, +báo quốc tế & VOA/RFA. Bản 2026-09-13 (globalping từ CN + OONI): +Sora/claude.com/Copilot/Midjourney/hf.co, +OneDrive, +RFI/WaPo/SCMP; bỏ byteimg.com (CDN nội địa Toutiao/掘金), jsdelivr/unpkg/cloudflare.com/box.com (mở thẳng ở TQ).
 #!homepage=https://github.com/kulinh/shadowrocket-vietnamese
 
 # ============================================================================
@@ -65,7 +65,6 @@ DOMAIN-SUFFIX,youtubekids.com,PROXY
 DOMAIN-SUFFIX,yt.be,PROXY
 # --- Android / Play / Chrome ---
 DOMAIN-SUFFIX,android.com,PROXY
-DOMAIN-SUFFIX,dl.google.com,PROXY
 DOMAIN-SUFFIX,chromium.org,PROXY
 # --- Firebase / Google Cloud Platform ---
 DOMAIN-SUFFIX,firebaseio.com,PROXY
@@ -211,7 +210,8 @@ DOMAIN-SUFFIX,tiktokcdn-eu.com,PROXY
 DOMAIN-SUFFIX,byteoversea.com,PROXY
 DOMAIN-SUFFIX,ibytedtos.com,PROXY
 DOMAIN-SUFFIX,ibyteimg.com,PROXY
-DOMAIN-SUFFIX,byteimg.com,PROXY
+# byteimg.com KHÔNG đưa vào: CDN ảnh dùng chung với Toutiao/掘金/番茄 nội địa
+# (p1-juejin.byteimg.com mở thẳng từ Bắc Kinh/Thượng Hải/Quảng Châu 13/09/2026)
 DOMAIN-SUFFIX,ttwstatic.com,PROXY
 DOMAIN-SUFFIX,muscdn.com,PROXY
 DOMAIN-SUFFIX,musical.ly,PROXY
@@ -262,16 +262,23 @@ DOMAIN-SUFFIX,openai.com,PROXY
 DOMAIN-SUFFIX,chatgpt.com,PROXY
 DOMAIN-SUFFIX,oaiusercontent.com,PROXY
 DOMAIN-SUFFIX,oaistatic.com,PROXY
+DOMAIN-SUFFIX,sora.com,PROXY
 DOMAIN-SUFFIX,ai.com,PROXY
 DOMAIN-SUFFIX,anthropic.com,PROXY
 DOMAIN-SUFFIX,claude.ai,PROXY
+DOMAIN-SUFFIX,claude.com,PROXY
 DOMAIN-SUFFIX,x.ai,PROXY
 DOMAIN-SUFFIX,grok.com,PROXY
 DOMAIN-SUFFIX,perplexity.ai,PROXY
 DOMAIN-SUFFIX,huggingface.co,PROXY
+DOMAIN-SUFFIX,hf.co,PROXY
 DOMAIN-SUFFIX,poe.com,PROXY
 DOMAIN-SUFFIX,character.ai,PROXY
 DOMAIN-SUFFIX,mistral.ai,PROXY
+# copilot: ECONNRESET từ 3 node đại lục 13/09/2026 (bing.com vẫn mở, không đưa vào)
+DOMAIN-SUFFIX,copilot.microsoft.com,PROXY
+# midjourney: trả 403 cho IP TQ (chặn phía dịch vụ) -> cho đi proxy
+DOMAIN-SUFFIX,midjourney.com,PROXY
 
 # ----------------------------------------------------------------------------
 # DEV (GitHub...)
@@ -363,7 +370,12 @@ DOMAIN-SUFFIX,archive.ph,PROXY
 DOMAIN-SUFFIX,archive.today,PROXY
 DOMAIN-SUFFIX,mega.nz,PROXY
 DOMAIN-SUFFIX,mega.io,PROXY
-DOMAIN-SUFFIX,box.com,PROXY
+# box.com mở thẳng từ TQ (200 x3 node 13/09/2026) -> không đưa vào
+# OneDrive cá nhân: onedrive.live.com timeout TCP từ TQ 13/09/2026 (OONI 0/115 OK);
+# live.com/outlook vẫn mở nên chỉ bắt phần OneDrive
+DOMAIN-SUFFIX,onedrive.live.com,PROXY
+DOMAIN-SUFFIX,1drv.ms,PROXY
+DOMAIN-SUFFIX,1drv.com,PROXY
 DOMAIN-SUFFIX,proton.me,PROXY
 DOMAIN-SUFFIX,protonmail.com,PROXY
 
@@ -373,7 +385,10 @@ DOMAIN-SUFFIX,protonmail.com,PROXY
 DOMAIN-SUFFIX,rfa.org,PROXY
 DOMAIN-SUFFIX,voanews.com,PROXY
 DOMAIN-SUFFIX,voatiengviet.com,PROXY
+DOMAIN-SUFFIX,rfi.fr,PROXY
 DOMAIN-SUFFIX,nytimes.com,PROXY
+DOMAIN-SUFFIX,washingtonpost.com,PROXY
+DOMAIN-SUFFIX,scmp.com,PROXY
 DOMAIN-SUFFIX,nyt.com,PROXY
 DOMAIN-SUFFIX,wsj.com,PROXY
 DOMAIN-SUFFIX,reuters.com,PROXY
@@ -401,6 +416,8 @@ DOMAIN-SUFFIX,ip.sb,PROXY
 
 # ----------------------------------------------------------------------------
 # CDN LỚN (chỉ bắt domain CDN của chính nhà cung cấp, không ảnh hưởng site TQ)
+#   Đã bỏ 13/09/2026 vì mở thẳng từ TQ (200 x3 node đại lục, OONI OK):
+#   cloudflare.com, cdn.jsdelivr.net, unpkg.com — cho đi proxy chỉ làm chậm.
 # ----------------------------------------------------------------------------
 DOMAIN-SUFFIX,akamai.net,PROXY
 DOMAIN-SUFFIX,akamaized.net,PROXY
@@ -411,6 +428,3 @@ DOMAIN-SUFFIX,cloudfront.net,PROXY
 DOMAIN-SUFFIX,fastly.net,PROXY
 DOMAIN-SUFFIX,fastlylb.net,PROXY
 DOMAIN-SUFFIX,azureedge.net,PROXY
-DOMAIN-SUFFIX,cloudflare.com,PROXY
-DOMAIN-SUFFIX,jsdelivr.net,PROXY
-DOMAIN-SUFFIX,unpkg.com,PROXY

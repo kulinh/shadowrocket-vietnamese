@@ -1,5 +1,5 @@
 #!name=UAE OTT Bypass (VoIP & Video Call) 2026
-#!desc=Vượt firewall TDRA ở UAE, đúng và đủ: (1) mở GỌI THOẠI & VIDEO qua OTT (WhatsApp, FaceTime, Messenger, Viber, Zalo, Telegram, Signal, Discord, imo, Snapchat, LINE, KakaoTalk, WeChat) kèm IP-CIDR server media (RTP/STUN/TURN) đối chiếu BGP 09/2026; (2) các nhóm site TDRA chặn hẳn, đã kiểm chứng từ mạng du + Etisalat 12/09/2026 (người lớn, cờ bạc, hẹn hò, nhà cung cấp VPN, vài báo); (3) DNS công cộng. Bản 2026-09: BỎ các rule thừa làm chậm máy (Google/YouTube/Netflix/X/TikTok, Teams/Meet/Skype, CDN Akamai/CloudFront/Cloudflare) vì ở UAE chúng mở bình thường.
+#!desc=Vượt firewall TDRA ở UAE, đúng và đủ: (1) mở GỌI THOẠI & VIDEO qua OTT (WhatsApp, FaceTime, Messenger, Viber, Zalo, Telegram, Signal, Discord, imo, Snapchat, LINE, KakaoTalk, WeChat) kèm IP-CIDR server media (RTP/STUN/TURN) đối chiếu BGP 09/2026; (2) các nhóm site TDRA chặn hẳn, đã kiểm chứng từ mạng du + Etisalat 12/09/2026 (người lớn, cờ bạc, hẹn hò, nhà cung cấp VPN, vài báo); (3) DNS công cộng. Bản 2026-09: BỎ các rule thừa làm chậm máy (Google/YouTube/Netflix/X/TikTok, Teams/Meet/Skype, CDN Akamai/CloudFront/Cloudflare) vì ở UAE chúng mở bình thường. 13/09/2026: đối chiếu lại BGP (Meta AS32934, Telegram cidr.txt, VNG AS38244 — đủ), bỏ proton.me (Proton Mail mở bình thường) và 2 rule trùng qq.com.
 #!homepage=https://github.com/kulinh/shadowrocket-vietnamese
 
 # ============================================================================
@@ -89,7 +89,7 @@ DOMAIN-SUFFIX,signal.org,PROXY
 DOMAIN-SUFFIX,signal.art,PROXY
 DOMAIN-SUFFIX,whispersystems.org,PROXY
 
-# ---------------------------- Discord (voice) ------------------------------
+# ---------------------------- Discord (web mở, OONI AE 4444/4633 OK; chỉ voice bị chặn) ---
 DOMAIN-SUFFIX,discord.com,PROXY
 DOMAIN-SUFFIX,discordapp.com,PROXY
 DOMAIN-SUFFIX,discordapp.net,PROXY
@@ -114,8 +114,6 @@ DOMAIN-SUFFIX,kakaocdn.net,PROXY
 
 # ---------------------------- WeChat / Weixin ------------------------------
 DOMAIN-SUFFIX,wechat.com,PROXY
-DOMAIN-SUFFIX,weixin.qq.com,PROXY
-DOMAIN-SUFFIX,wx.qq.com,PROXY
 DOMAIN-SUFFIX,wechatapp.com,PROXY
 DOMAIN-SUFFIX,qq.com,PROXY
 DOMAIN-SUFFIX,qpic.cn,PROXY
@@ -215,9 +213,10 @@ DOMAIN-SUFFIX,bumble.com,PROXY
 DOMAIN-SUFFIX,okcupid.com,PROXY
 DOMAIN-SUFFIX,grindr.com,PROXY
 # --- Nhà cung cấp VPN (trang web + app store của họ) ---
+#     proton.me (Proton Mail) KHÔNG bị chặn: OONI AE 01–09/2026 proton.me 424/426,
+#     mail.proton.me 315/315 OK -> bỏ; chỉ protonvpn.com bị chặn (76/89 lỗi).
 DOMAIN-SUFFIX,nordvpn.com,PROXY
 DOMAIN-SUFFIX,protonvpn.com,PROXY
-DOMAIN-SUFFIX,proton.me,PROXY
 DOMAIN-SUFFIX,expressvpn.com,PROXY
 DOMAIN-SUFFIX,surfshark.com,PROXY
 DOMAIN-SUFFIX,windscribe.com,PROXY
@@ -242,7 +241,8 @@ IP-CIDR,1.0.0.1/32,PROXY,no-resolve
 #  x.com/twitter.com, tiktok.com, threads.net, teams.microsoft.com,
 #  meet.google.com, zoom.us, skype.com, wikipedia.org, reddit.com, twitch.tv,
 #  aljazeera.com, bbc.com, ynet.co.il (Israel đã bỏ chặn), archive.org,
-#  binance.com; và cả nhóm CDN akamai/cloudfront/amazonaws/cloudflare/fastly
+#  binance.com, proton.me (mail; bỏ 13/09/2026 theo OONI); và cả nhóm CDN
+#  akamai/cloudfront/amazonaws/cloudflare/fastly
 #  (đẩy nửa Internet qua proxy, kể cả site UAE). Muốn mọi thứ qua VPN: dùng
 #  link config &final=proxy hoặc Định tuyến toàn cục = Proxy.
 # ============================================================================
